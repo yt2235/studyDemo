@@ -1,0 +1,41 @@
+{
+    "Metadata": {
+        "title": "StudyDemo - Application Web Moderne",
+        "description": "Une application web moderne construite avec Next.js, avec support pour l'internationalisation, l'optimisation SEO et le mode sombre."
+    },
+    "HomePage": {
+        "badge": "Next.js 16 + TypeScript",
+        "title": "Créez des Applications Web Modernes",
+        "subtitle": "en Toute Confiance",
+        "description": "Un modèle de démarrage soigneusement conçu avec internationalisation, optimisation SEO et mode sombre intégré — tout ce dont vous avez besoin pour créer des applications web de classe mondiale.",
+        "getStarted": "Commencer",
+        "learnMore": "En Savoir Plus",
+        "features": {
+            "title": "Fonctionnalités Principales",
+            "i18n": {
+                "title": "Internationalisation",
+                "description": "Support multilingue intégré avec next-intl. Basculez entre les langues de manière fluide grâce au routage basé sur la locale."
+            },
+            "seo": {
+                "title": "Optimisé pour le SEO",
+                "description": "Métadonnées dynamiques, balises Open Graph, sitemap, robots.txt et liens hreflang pour une visibilité maximale sur les moteurs de recherche."
+            },
+            "darkMode": {
+                "title": "Mode Sombre",
+                "description": "Basculement élégant entre les thèmes clair, sombre et système. Votre préférence est mémorisée entre les visites."
+            }
+        }
+    },
+    "LocaleSwitcher": {
+        "label": "Langue",
+        "zh": "中文",
+        "en": "English",
+        "es": "Español",
+        "fr": "Français"
+    },
+    "ThemeToggle": {
+        "light": "Clair",
+        "dark": "Sombre",
+        "system": "Système"
+    }
+}
