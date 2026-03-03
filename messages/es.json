@@ -23,6 +23,12 @@
             "darkMode": {
                 "title": "Modo Oscuro",
                 "description": "Alternancia elegante entre temas claro, oscuro y del sistema. Tu preferencia se recuerda entre visitas."
+            },
+            "products": {
+                "title": "Productos Médicos",
+                "subtitle": "Soluciones médicas de alta calidad, enfocadas en cada detalle.",
+                "category": "Categoría",
+                "specification": "Especificación"
             }
         }
     },

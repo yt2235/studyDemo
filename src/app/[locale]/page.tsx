@@ -155,9 +155,6 @@ export default async function HomePage({ params }: Props) {
                                             {product.name}
                                         </h3>
                                         <div className="flex flex-col gap-1 mt-auto">
-                                            <span className="text-[10px] font-medium text-zinc-400 dark:text-zinc-500 uppercase tracking-widest leading-none">
-                                                {t('features.products.specification')}
-                                            </span>
                                             <span className="text-sm font-medium text-zinc-600 dark:text-zinc-300">
                                                 {product.specification}
                                             </span>
