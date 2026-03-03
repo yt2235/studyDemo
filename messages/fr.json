@@ -1,35 +1,41 @@
 {
     "Metadata": {
-        "title": "StudyDemo - Application Web Moderne",
-        "description": "Une application web moderne construite avec Next.js, avec support pour l'internationalisation, l'optimisation SEO et le mode sombre."
+        "title": "GlobalTrade - Plateforme de Commerce International",
+        "description": "Plateforme professionnelle de produits de commerce extérieur, avec navigation par catégories et connexion entre fournisseurs et acheteurs mondiaux."
     },
     "HomePage": {
-        "badge": "Next.js 16 + TypeScript",
-        "title": "Créez des Applications Web Modernes",
-        "subtitle": "en Toute Confiance",
-        "description": "Un modèle de démarrage soigneusement conçu avec internationalisation, optimisation SEO et mode sombre intégré — tout ce dont vous avez besoin pour créer des applications web de classe mondiale.",
-        "getStarted": "Commencer",
-        "learnMore": "En Savoir Plus",
-        "features": {
-            "title": "Fonctionnalités Principales",
-            "i18n": {
-                "title": "Internationalisation",
-                "description": "Support multilingue intégré avec next-intl. Basculez entre les langues de manière fluide grâce au routage basé sur la locale."
-            },
-            "seo": {
-                "title": "Optimisé pour le SEO",
-                "description": "Métadonnées dynamiques, balises Open Graph, sitemap, robots.txt et liens hreflang pour une visibilité maximale sur les moteurs de recherche."
-            },
-            "darkMode": {
-                "title": "Mode Sombre",
-                "description": "Basculement élégant entre les thèmes clair, sombre et système. Votre préférence est mémorisée entre les visites."
-            },
-            "products": {
-                "title": "Produits Médicaux",
-                "subtitle": "Solutions médicales de haute qualité, focalisées sur chaque détail.",
-                "category": "Catégorie",
-                "specification": "Spécification"
-            }
+        "badge": "Votre Partenaire Commercial de Confiance",
+        "title": "Produits de Qualité",
+        "subtitle": "Portée Mondiale",
+        "description": "Nous nous engageons à fournir des produits de haute qualité aux clients du monde entier. Des services commerciaux professionnels pour simplifier vos achats.",
+        "viewProducts": "Voir les Produits",
+        "contactUs": "Nous Contacter",
+        "nav": {
+            "products": "Produits",
+            "contact": "Contact"
+        },
+        "stats": {
+            "products": "Produits de Qualité",
+            "countries": "Pays d'Exportation",
+            "years": "Années d'Expérience",
+            "satisfaction": "Satisfaction Client"
+        },
+        "products": {
+            "title": "Centre de Produits",
+            "subtitle": "Parcourez notre gamme complète de produits par catégorie pour trouver les produits de qualité qui répondent à vos besoins.",
+            "totalItems": "produits",
+            "items": "articles"
+        },
+        "contact": {
+            "title": "Commencez Votre Voyage Commercial Mondial",
+            "description": "Que vous ayez besoin de devis, de personnalisation ou d'achats en gros, notre équipe professionnelle est toujours prête à vous servir.",
+            "email": "Envoyer un E-mail"
+        },
+        "footer": {
+            "companyDesc": "Des années d'expertise en commerce international, offrant des produits de qualité et des services d'approvisionnement complets aux clients du monde entier.",
+            "quickLinks": "Liens Rapides",
+            "contactInfo": "Coordonnées",
+            "rights": "Tous droits réservés."
         }
     },
     "LocaleSwitcher": {

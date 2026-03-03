@@ -1,35 +1,41 @@
 {
   "Metadata": {
-    "title": "StudyDemo - 现代 Web 应用",
-    "description": "基于 Next.js 构建的现代 Web 应用，支持国际化、SEO 优化和黑夜模式。"
+    "title": "GlobalTrade - 全球贸易产品展示平台",
+    "description": "专业外贸产品展示平台，提供优质产品分类浏览，连接全球供应商与采购商。"
   },
   "HomePage": {
-    "badge": "Next.js 16 + TypeScript",
-    "title": "构建现代 Web 应用",
-    "subtitle": "从容自信",
-    "description": "精心打造的入门模板，集成国际化、SEO 优化和无缝黑夜模式切换 —— 构建世界一流 Web 应用所需的一切。",
-    "getStarted": "开始使用",
-    "learnMore": "了解更多",
-    "features": {
-      "title": "核心功能",
-      "i18n": {
-        "title": "国际化",
-        "description": "内置 next-intl 多语言支持，基于 locale 路由，中英文无缝切换。"
-      },
-      "seo": {
-        "title": "SEO 优化",
-        "description": "动态 Metadata、Open Graph 标签、Sitemap、Robots.txt 和 hreflang 链接，确保最大化搜索引擎可见性。"
-      },
-      "darkMode": {
-        "title": "黑夜模式",
-        "description": "优雅的主题切换，支持浅色、深色和跟随系统三种模式，偏好设置跨会话保持。"
-      },
-      "products": {
-        "title": "医疗器械产品",
-        "subtitle": "高品质医疗解决方案，专注每一个细节。",
-        "category": "类别",
-        "specification": "规格"
-      }
+    "badge": "值得信赖的外贸伙伴",
+    "title": "全球优质产品",
+    "subtitle": "一站直达",
+    "description": "我们致力于为全球客户提供高品质产品，涵盖多个行业领域。专业的外贸服务，让您的采购更简单、更高效。",
+    "viewProducts": "浏览产品",
+    "contactUs": "联系我们",
+    "nav": {
+      "products": "产品中心",
+      "contact": "联系我们"
+    },
+    "stats": {
+      "products": "优质产品",
+      "countries": "出口国家",
+      "years": "年行业经验",
+      "satisfaction": "客户满意度"
+    },
+    "products": {
+      "title": "产品中心",
+      "subtitle": "按类别浏览我们的全线产品，找到适合您需求的优质好货。",
+      "totalItems": "件产品",
+      "items": "件"
+    },
+    "contact": {
+      "title": "开启您的全球贸易之旅",
+      "description": "无论您需要询价、定制还是大批量采购，我们的专业团队随时为您服务。",
+      "email": "发送邮件"
+    },
+    "footer": {
+      "companyDesc": "专注国际贸易多年，为全球客户提供优质产品与一站式采购服务。",
+      "quickLinks": "快速导航",
+      "contactInfo": "联系方式",
+      "rights": "保留所有权利。"
     }
   },
   "LocaleSwitcher": {

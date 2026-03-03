@@ -1,35 +1,41 @@
 {
   "Metadata": {
-    "title": "StudyDemo - Modern Web Application",
-    "description": "A modern web application built with Next.js, featuring internationalization, SEO optimization, and dark mode support."
+    "title": "GlobalTrade - International Trade Product Platform",
+    "description": "Professional foreign trade product platform, offering quality product browsing by category, connecting global suppliers and buyers."
   },
   "HomePage": {
-    "badge": "Next.js 16 + TypeScript",
-    "title": "Build Modern Web Apps",
-    "subtitle": "with Confidence",
-    "description": "A beautifully crafted starter template featuring internationalization, SEO optimization, and seamless dark mode — everything you need to build world-class web applications.",
-    "getStarted": "Get Started",
-    "learnMore": "Learn More",
-    "features": {
-      "title": "Core Features",
-      "i18n": {
-        "title": "Internationalization",
-        "description": "Built-in multi-language support with next-intl. Seamlessly switch between Chinese and English with locale-based routing."
-      },
-      "seo": {
-        "title": "SEO Optimized",
-        "description": "Dynamic metadata, Open Graph tags, sitemap, robots.txt, and hreflang links ensure maximum search engine visibility."
-      },
-      "darkMode": {
-        "title": "Dark Mode",
-        "description": "Elegant theme switching between light, dark, and system modes. Your preference is remembered across visits."
-      },
-      "products": {
-        "title": "Medical Products",
-        "subtitle": "High-quality medical solutions, focused on every detail.",
-        "category": "Category",
-        "specification": "Specification"
-      }
+    "badge": "Your Trusted Trade Partner",
+    "title": "Quality Products",
+    "subtitle": "Worldwide Reach",
+    "description": "We are dedicated to providing high-quality products to global customers across multiple industries. Professional trade services to make your sourcing simpler and more efficient.",
+    "viewProducts": "Browse Products",
+    "contactUs": "Contact Us",
+    "nav": {
+      "products": "Products",
+      "contact": "Contact"
+    },
+    "stats": {
+      "products": "Quality Products",
+      "countries": "Export Countries",
+      "years": "Years of Experience",
+      "satisfaction": "Client Satisfaction"
+    },
+    "products": {
+      "title": "Product Center",
+      "subtitle": "Browse our full range of products by category to find the quality goods that meet your needs.",
+      "totalItems": "products",
+      "items": "items"
+    },
+    "contact": {
+      "title": "Start Your Global Trade Journey",
+      "description": "Whether you need quotes, customization, or bulk purchasing, our professional team is always ready to serve you.",
+      "email": "Send Email"
+    },
+    "footer": {
+      "companyDesc": "Years of international trade expertise, providing quality products and one-stop sourcing services to global customers.",
+      "quickLinks": "Quick Links",
+      "contactInfo": "Contact Info",
+      "rights": "All rights reserved."
     }
   },
   "LocaleSwitcher": {
