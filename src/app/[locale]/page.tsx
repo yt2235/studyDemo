@@ -3,6 +3,8 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { supabase } from '@/supabase';
 
+export const dynamic = 'force-dynamic';
+
 type Props = {
     params: Promise<{ locale: string }>;
 };
