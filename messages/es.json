@@ -4,7 +4,6 @@
         "description": "Plataforma profesional de productos de comercio exterior, con navegación por categorías y conexión entre proveedores y compradores globales."
     },
     "HomePage": {
-        "badge": "Su Socio Comercial de Confianza",
         "title": "Productos de Calidad",
         "subtitle": "Alcance Mundial",
         "description": "Nos dedicamos a ofrecer productos de alta calidad a clientes de todo el mundo. Servicios de comercio profesional para simplificar sus compras.",
@@ -49,5 +48,17 @@
         "light": "Claro",
         "dark": "Oscuro",
         "system": "Sistema"
+    },
+    "ProductDetail": {
+        "backToProducts": "Volver a Productos",
+        "category": "Categoría",
+        "specification": "Especificación",
+        "price": "Precio",
+        "description": "Descripción",
+        "contactForPrice": "Contactar para Precio",
+        "contactInquiry": "Contactar para Consulta",
+        "viewMore": "Ver Más Productos",
+        "notFound": "Producto No Encontrado",
+        "notFoundDesc": "Este producto no existe o ha sido retirado"
     }
 }

@@ -3,7 +3,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { supabase } from '@/supabase';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -68,15 +68,6 @@ export default async function HomePage({ params }: Props) {
             <main className="max-w-7xl mx-auto px-6">
                 <section className="pt-20 pb-16 md:pt-28 md:pb-24">
                     <div className="max-w-4xl mx-auto text-center">
-                        {/* Badge */}
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800/50 mb-8 animate-fade-in">
-                            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                            <span className="text-sm font-medium text-blue-700 dark:text-blue-300">
-                                {t('badge')}
-                            </span>
-                        </div>
-
-                        {/* Title */}
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.1] mb-6 animate-slide-up">
                             {t('title')}
                             <br />
@@ -192,16 +183,27 @@ export default async function HomePage({ params }: Props) {
                                     {/* Product Grid */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                         {groupedProducts[category].map((product) => (
-                                            <div key={product.id} className="group flex flex-col bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1 hover:border-blue-200 dark:hover:border-blue-800">
+                                            <a href={`/${locale}/product/${product.id}`} key={product.id} className="group flex flex-col bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1 hover:border-blue-200 dark:hover:border-blue-800 cursor-pointer">
                                                 {/* Image */}
                                                 <div className="aspect-[4/3] relative overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-                                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                    <img
-                                                        src={product.image_url}
-                                                        alt={product.name}
-                                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                                    />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                                    {product.image_url ? (
+                                                        <>
+                                                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                                                            <img
+                                                                src={product.image_url}
+                                                                alt={product.name}
+                                                                loading="lazy"
+                                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                            />
+                                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                                        </>
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center">
+                                                            <svg className="w-12 h-12 text-zinc-300 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
+                                                            </svg>
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 {/* Content */}
@@ -215,7 +217,7 @@ export default async function HomePage({ params }: Props) {
                                                         </span>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </a>
                                         ))}
                                     </div>
                                 </div>

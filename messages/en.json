@@ -4,7 +4,6 @@
     "description": "Professional foreign trade product platform, offering quality product browsing by category, connecting global suppliers and buyers."
   },
   "HomePage": {
-    "badge": "Your Trusted Trade Partner",
     "title": "Quality Products",
     "subtitle": "Worldwide Reach",
     "description": "We are dedicated to providing high-quality products to global customers across multiple industries. Professional trade services to make your sourcing simpler and more efficient.",
@@ -49,5 +48,17 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "ProductDetail": {
+    "backToProducts": "Back to Products",
+    "category": "Category",
+    "specification": "Specification",
+    "price": "Price",
+    "description": "Description",
+    "contactForPrice": "Contact for Price",
+    "contactInquiry": "Contact for Inquiry",
+    "viewMore": "View More Products",
+    "notFound": "Product Not Found",
+    "notFoundDesc": "This product does not exist or has been removed"
   }
 }

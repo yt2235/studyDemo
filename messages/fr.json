@@ -4,7 +4,6 @@
         "description": "Plateforme professionnelle de produits de commerce extérieur, avec navigation par catégories et connexion entre fournisseurs et acheteurs mondiaux."
     },
     "HomePage": {
-        "badge": "Votre Partenaire Commercial de Confiance",
         "title": "Produits de Qualité",
         "subtitle": "Portée Mondiale",
         "description": "Nous nous engageons à fournir des produits de haute qualité aux clients du monde entier. Des services commerciaux professionnels pour simplifier vos achats.",
@@ -49,5 +48,17 @@
         "light": "Clair",
         "dark": "Sombre",
         "system": "Système"
+    },
+    "ProductDetail": {
+        "backToProducts": "Retour aux Produits",
+        "category": "Catégorie",
+        "specification": "Spécification",
+        "price": "Prix",
+        "description": "Description",
+        "contactForPrice": "Contacter pour le Prix",
+        "contactInquiry": "Contacter pour Demande",
+        "viewMore": "Voir Plus de Produits",
+        "notFound": "Produit Non Trouvé",
+        "notFoundDesc": "Ce produit n'existe pas ou a été retiré"
     }
 }

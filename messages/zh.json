@@ -4,7 +4,6 @@
     "description": "专业外贸产品展示平台，提供优质产品分类浏览，连接全球供应商与采购商。"
   },
   "HomePage": {
-    "badge": "值得信赖的外贸伙伴",
     "title": "全球优质产品",
     "subtitle": "一站直达",
     "description": "我们致力于为全球客户提供高品质产品，涵盖多个行业领域。专业的外贸服务，让您的采购更简单、更高效。",
@@ -49,5 +48,17 @@
     "light": "浅色",
     "dark": "深色",
     "system": "系统"
+  },
+  "ProductDetail": {
+    "backToProducts": "返回产品列表",
+    "category": "产品分类",
+    "specification": "产品规格",
+    "price": "价格",
+    "description": "产品描述",
+    "contactForPrice": "联系询价",
+    "contactInquiry": "联系询价",
+    "viewMore": "查看更多产品",
+    "notFound": "产品未找到",
+    "notFoundDesc": "该产品不存在或已下架"
   }
 }
