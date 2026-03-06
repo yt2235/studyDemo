@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { supabase } from '@/supabase';
+import { CategoryShowcase, Category, Product } from '@/components/CategoryShowcase';
 
 export const revalidate = 60;
 
@@ -12,13 +13,10 @@ type Props = {
 interface ProductRaw {
     id: number;
     name: string;
-    category: string;
+    category_id: string; // Updated from category
     specification: string;
     image_url: string;
-}
-
-interface Product extends Omit<ProductRaw, 'image_url'> {
-    image_url: string[];
+    category: string; // Fallback
 }
 
 function parseImageUrl(raw: string): string[] {
@@ -36,19 +34,22 @@ export default async function HomePage({ params }: Props) {
 
     const t = await getTranslations('HomePage');
 
-    // Fetching data from the 'products' table
-    const { data: products, error } = await supabase.from('products').select('*');
-    const typedProducts: Product[] = ((products as ProductRaw[]) || []).map(p => ({
-        ...p,
+    // Fetching categories and products concurrently
+    const [categoriesRes, productsRes] = await Promise.all([
+        supabase.from('categories').select('*').order('sort_order', { ascending: true }),
+        supabase.from('products').select('*')
+    ]);
+
+    const categoriesData: Category[] = categoriesRes.data || [];
+    const error = categoriesRes.error || productsRes.error;
+
+    const typedProducts: Product[] = ((productsRes.data as ProductRaw[]) || []).map(p => ({
+        id: p.id,
+        name: p.name,
+        category_id: p.category_id || p.category || '', // Fallback to category if DB hasn't migrated
+        specification: p.specification,
         image_url: parseImageUrl(p.image_url),
     }));
-
-    // Group products by category
-    const categories = Array.from(new Set(typedProducts.map(p => p.category)));
-    const groupedProducts: Record<string, Product[]> = {};
-    categories.forEach(cat => {
-        groupedProducts[cat] = typedProducts.filter(p => p.category === cat);
-    });
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-slate-950 transition-colors duration-500">
@@ -142,105 +143,29 @@ export default async function HomePage({ params }: Props) {
                 </section>
 
                 {/* Products Section */}
-                <section id="products" className="pb-24 md:pb-32 scroll-mt-20">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-                        <div className="max-w-2xl">
-                            <h2 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-50 mb-3 tracking-tight">
-                                {t('products.title')}
-                            </h2>
-                            <p className="text-zinc-600 dark:text-zinc-400 text-lg">
-                                {t('products.subtitle')}
-                            </p>
-                        </div>
-                        <div className="text-sm text-zinc-500 dark:text-zinc-400">
-                            {typedProducts.length} {t('products.totalItems')}
-                        </div>
-                    </div>
-
-                    {/* Category Navigation */}
-                    {categories.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-10">
-                            {categories.map((category) => (
-                                <a
-                                    key={category}
-                                    href={`#category-${category}`}
-                                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-blue-400 hover:text-blue-600 dark:hover:border-blue-500 dark:hover:text-blue-400 hover:shadow-md hover:shadow-blue-500/10 transition-all duration-300"
-                                >
-                                    {category}
-                                    <span className="px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-700 text-xs text-zinc-500 dark:text-zinc-400">
-                                        {groupedProducts[category].length}
-                                    </span>
-                                </a>
-                            ))}
-                        </div>
-                    )}
-
-                    {error ? (
+                {error ? (
+                    <div className="max-w-7xl mx-auto px-6 mb-24">
                         <div className="p-8 rounded-2xl bg-red-500/5 border border-red-500/20 text-red-500 text-center">
                             <p className="font-semibold mb-2">Connection Error</p>
                             <p className="text-sm opacity-80">{error.message}</p>
                         </div>
-                    ) : (
-                        <div className="space-y-16">
-                            {categories.map((category) => (
-                                <div key={category} id={`category-${category}`} className="scroll-mt-24">
-                                    {/* Category Header */}
-                                    <div className="flex items-center gap-4 mb-8">
-                                        <div className="w-1.5 h-8 rounded-full bg-gradient-to-b from-blue-500 to-cyan-500" />
-                                        <h3 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                                            {category}
-                                        </h3>
-                                        <span className="px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/50 text-sm font-medium text-blue-600 dark:text-blue-400 border border-blue-200/50 dark:border-blue-800/50">
-                                            {groupedProducts[category].length} {t('products.items')}
-                                        </span>
-                                        <div className="flex-1 h-px bg-gradient-to-r from-zinc-200 dark:from-zinc-800 to-transparent" />
-                                    </div>
-
-                                    {/* Product Grid */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                        {groupedProducts[category].map((product) => (
-                                            <a href={`/${locale}/product/${product.id}`} key={product.id} className="group flex flex-col bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1 hover:border-blue-200 dark:hover:border-blue-800 cursor-pointer">
-                                                {/* Image */}
-                                                <div className="aspect-[4/3] relative overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-                                                    {product.image_url.length > 0 ? (
-                                                        <>
-                                                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                            <img
-                                                                src={product.image_url[0]}
-                                                                alt={product.name}
-                                                                loading="lazy"
-                                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                                            />
-                                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                                        </>
-                                                    ) : (
-                                                        <div className="w-full h-full flex items-center justify-center">
-                                                            <svg className="w-12 h-12 text-zinc-300 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
-                                                            </svg>
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                {/* Content */}
-                                                <div className="p-5 flex flex-col flex-grow">
-                                                    <h4 className="text-base font-bold text-zinc-900 dark:text-zinc-50 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
-                                                        {product.name}
-                                                    </h4>
-                                                    <div className="flex flex-col gap-1.5 mt-auto">
-                                                        <span className="text-sm text-zinc-500 dark:text-zinc-400">
-                                                            {product.specification}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </section>
+                    </div>
+                ) : (
+                    <div className="max-w-7xl mx-auto px-0 md:px-6">
+                        <CategoryShowcase
+                            categories={categoriesData}
+                            products={typedProducts}
+                            locale={locale}
+                            dict={{
+                                title: t('products.title'),
+                                subtitle: t('products.subtitle'),
+                                totalItems: t('products.totalItems'),
+                                items: t('products.items'),
+                                all: t('products.all', { fallback: 'All' })
+                            }}
+                        />
+                    </div>
+                )}
 
                 {/* Contact Section */}
                 <section id="contact" className="pb-24 md:pb-32 scroll-mt-20">

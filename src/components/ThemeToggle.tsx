@@ -22,14 +22,13 @@ export function ThemeToggle() {
     }
 
     const themes = [
-        { key: 'light' as const, icon: '☀️' },
-        { key: 'dark' as const, icon: '🌙' },
-        { key: 'system' as const, icon: '💻' },
+        { key: 'light' as const },
+        { key: 'dark' as const },
     ];
 
     return (
         <div className="flex items-center gap-1 rounded-full bg-zinc-100 p-1 dark:bg-zinc-800 transition-colors duration-300">
-            {themes.map(({ key, icon }) => (
+            {themes.map(({ key }) => (
                 <button
                     key={key}
                     onClick={() => setTheme(key)}
@@ -39,8 +38,7 @@ export function ThemeToggle() {
                         }`}
                     aria-label={t(key)}
                 >
-                    <span className="text-base">{icon}</span>
-                    <span className="hidden sm:inline">{t(key)}</span>
+                    <span className="inline">{t(key)}</span>
                 </button>
             ))}
         </div>

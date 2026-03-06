@@ -23,7 +23,8 @@
       "title": "Product Center",
       "subtitle": "Browse our full range of products by category to find the quality goods that meet your needs.",
       "totalItems": "products",
-      "items": "items"
+      "items": "items",
+      "all": "All"
     },
     "contact": {
       "title": "Start Your Global Trade Journey",

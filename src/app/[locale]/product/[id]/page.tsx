@@ -15,6 +15,7 @@ interface Product {
     id: number;
     name: string;
     category: string;
+    category_id?: string;
     specification: string;
     image_url: string;
     price: number;
@@ -70,6 +71,19 @@ export default async function ProductDetailPage({ params }: Props) {
     const typedProduct = product as Product;
     const productImages = parseImageUrl(typedProduct.image_url);
 
+    // Fetch actual category name if category_id exists
+    let displayCategory = typedProduct.category || '';
+    if (typedProduct.category_id) {
+        const { data: categoryData } = await supabase
+            .from('categories')
+            .select('name')
+            .eq('id', typedProduct.category_id)
+            .single();
+        if (categoryData && categoryData.name) {
+            displayCategory = categoryData.name;
+        }
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-slate-950 transition-colors duration-500">
             {/* Navigation Bar */}
@@ -122,9 +136,9 @@ export default async function ProductDetailPage({ params }: Props) {
                 </a>
 
                 {/* Product Detail Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
                     {/* Left: Product Image */}
-                    <div className="animate-slide-in-left">
+                    <div className="animate-slide-in-left lg:col-span-5 max-w-lg mx-auto w-full">
                         <ProductImageGallery
                             images={productImages}
                             productName={typedProduct.name}
@@ -132,7 +146,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     </div>
 
                     {/* Right: Product Info */}
-                    <div className="animate-slide-in-right flex flex-col justify-center">
+                    <div className="animate-slide-in-right lg:col-span-7 flex flex-col justify-center">
                         {/* Product Name */}
                         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight leading-tight mb-6">
                             {typedProduct.name}
@@ -142,7 +156,7 @@ export default async function ProductDetailPage({ params }: Props) {
                         <div className="mb-8">
                             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800/50 text-sm font-medium text-blue-700 dark:text-blue-300">
                                 <span className="w-2 h-2 rounded-full bg-blue-500" />
-                                {typedProduct.category}
+                                {displayCategory}
                             </span>
                         </div>
 
