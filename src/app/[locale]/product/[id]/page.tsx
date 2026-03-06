@@ -3,6 +3,7 @@ import { supabase } from '@/supabase';
 import { notFound } from 'next/navigation';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
+import { ProductImageGallery } from '@/components/ProductImageGallery';
 
 export const revalidate = 60;
 
@@ -18,6 +19,15 @@ interface Product {
     image_url: string;
     price: number;
     description: string;
+}
+
+function parseImageUrl(raw: string): string[] {
+    try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return raw ? [raw] : [];
+    }
 }
 
 export async function generateMetadata({ params }: Props) {
@@ -58,6 +68,7 @@ export default async function ProductDetailPage({ params }: Props) {
     }
 
     const typedProduct = product as Product;
+    const productImages = parseImageUrl(typedProduct.image_url);
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-slate-950 transition-colors duration-500">
@@ -114,16 +125,10 @@ export default async function ProductDetailPage({ params }: Props) {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
                     {/* Left: Product Image */}
                     <div className="animate-slide-in-left">
-                        <div className="group relative aspect-square rounded-3xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-xl">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                                src={typedProduct.image_url}
-                                alt={typedProduct.name}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            />
-                            {/* Gradient overlay on hover */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                        </div>
+                        <ProductImageGallery
+                            images={productImages}
+                            productName={typedProduct.name}
+                        />
                     </div>
 
                     {/* Right: Product Info */}

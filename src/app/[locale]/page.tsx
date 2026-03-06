@@ -9,12 +9,25 @@ type Props = {
     params: Promise<{ locale: string }>;
 };
 
-interface Product {
+interface ProductRaw {
     id: number;
     name: string;
     category: string;
     specification: string;
     image_url: string;
+}
+
+interface Product extends Omit<ProductRaw, 'image_url'> {
+    image_url: string[];
+}
+
+function parseImageUrl(raw: string): string[] {
+    try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return raw ? [raw] : [];
+    }
 }
 
 export default async function HomePage({ params }: Props) {
@@ -25,7 +38,10 @@ export default async function HomePage({ params }: Props) {
 
     // Fetching data from the 'products' table
     const { data: products, error } = await supabase.from('products').select('*');
-    const typedProducts = (products as Product[]) || [];
+    const typedProducts: Product[] = ((products as ProductRaw[]) || []).map(p => ({
+        ...p,
+        image_url: parseImageUrl(p.image_url),
+    }));
 
     // Group products by category
     const categories = Array.from(new Set(typedProducts.map(p => p.category)));
@@ -186,11 +202,11 @@ export default async function HomePage({ params }: Props) {
                                             <a href={`/${locale}/product/${product.id}`} key={product.id} className="group flex flex-col bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-1 hover:border-blue-200 dark:hover:border-blue-800 cursor-pointer">
                                                 {/* Image */}
                                                 <div className="aspect-[4/3] relative overflow-hidden bg-zinc-100 dark:bg-zinc-800">
-                                                    {product.image_url ? (
+                                                    {product.image_url.length > 0 ? (
                                                         <>
                                                             {/* eslint-disable-next-line @next/next/no-img-element */}
                                                             <img
-                                                                src={product.image_url}
+                                                                src={product.image_url[0]}
                                                                 alt={product.name}
                                                                 loading="lazy"
                                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
