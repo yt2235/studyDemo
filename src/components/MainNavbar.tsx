@@ -25,7 +25,7 @@ export default function MainNavbar({ locale }: MainNavbarProps) {
                                 src="/logo.png"
                                 alt="yichihealth logo"
                                 fill
-                                className="object-contain object-left scale-[2.5] origin-left"
+                                className="object-contain object-left"
                                 priority
                             />
                         </div>

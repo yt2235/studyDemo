@@ -22,7 +22,7 @@ export default function MainFooter({ locale }: MainFooterProps) {
                                     src="/logo.png"
                                     alt="yichihealth logo"
                                     fill
-                                    className="object-contain object-left scale-[2.5] origin-left"
+                                    className="object-contain object-left"
                                 />
                             </div>
                         </div>
