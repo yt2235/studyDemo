@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "title": "GlobalTrade - 全球贸易产品展示平台",
+    "title": "yichihealth - 全球贸易产品展示平台",
     "description": "专业外贸产品展示平台，提供优质产品分类浏览，连接全球供应商与采购商。"
   },
   "HomePage": {
@@ -11,6 +11,7 @@
     "contactUs": "联系我们",
     "nav": {
       "products": "产品中心",
+      "about": "关于我们",
       "contact": "联系我们"
     },
     "stats": {
@@ -61,5 +62,64 @@
     "viewMore": "查看更多产品",
     "notFound": "产品未找到",
     "notFoundDesc": "该产品不存在或已下架"
+  },
+  "AboutPage": {
+    "heroTitle": "公司简介",
+    "heroSubtitle": "连接全球市场，创造无限可能",
+    "whyChooseUs": "WHY CHOOSE US",
+    "whyChooseUsDesc": "我们拥有卓越的品质与专业的服务",
+    "features": {
+      "factory": {
+        "title": "源头工厂",
+        "desc": "我们公司拥有自有工厂，占地面积广，生产能力大，且地理位置优越。"
+      },
+      "quality": {
+        "title": "产品质量",
+        "desc": "我们的产品已经过并符合多项国际质量检验标准。"
+      },
+      "team": {
+        "title": "专业团队",
+        "desc": "我们的团队为您提供最先进、可持续的定制化制造解决方案。"
+      },
+      "technology": {
+        "title": "先进技术",
+        "desc": "我们采用涵盖国内及国际领域领先水平的先进技术与生产工艺。"
+      }
+    },
+    "introText1": "义乌市一驰健康（Yiwu Yichi Health）是一家专业的全球医疗耗材与器械供应商，集国际贸易、供应链整合及定制化服务于一体。我们为全球医院、诊所、护理机构及分销商提供一站式医疗解决方案，涵盖一次性医疗用品、家用医疗器械、临床诊断设备及基础医疗器械。",
+    "introText2": "我们的核心产品包括注射器、输液器、医疗手套、血糖仪、血氧仪、IVD 快速检测试剂盒等。所有合作生产基地均符合 ISO 13485 体系认证，核心产品拥有 CE 和 FDA 认证，完全符合国际质量与合规标准。",
+    "introText3": "凭借丰富的行业资源与成熟的贸易经验，我们拥有稳定的全球供应链和强大的 OEM/ODM 能力，可提供从选材、设计到包装、标签的个性化定制服务。",
+    "introText4": "我们秉承“诚信为本，质量第一”的宗旨，致力于为全球客户提供高品质、高性价比的医疗产品，并建立长期的双赢合作伙伴关系。凭借专业的外贸服务和深厚的市场监管知识，我们全力支持您的医疗供应业务。欢迎联系我们进行定制合作与产品咨询！",
+    "companyProfileTitle": "COMPANY PROFILE",
+    "companyProfileSubTitle": "一驰健康 --- 全球医疗耗材供应商",
+    "companyProfileText": "已通过 ISO13485/CE/FDA 认证，提供一次性医疗用品及诊断设备。具有强大的 OEM/ODM 能力，以及稳定的供应链。我们将始终秉承“诚信为本，质量第一”的宗旨，实现全球合作共赢。",
+    "companyProfileViewMore": "了解更多 +",
+    "companyProfileWelcome": "欢迎来到我们的公司",
+    "companyProfileWatermark": "ABOUT US",
+    "factoryPhotos": "FACTORY PHOTOS",
+    "factoryPhotosDesc": "先进的生产设备与严谨的制造工艺",
+    "contactUs": "CONTACT US",
+    "contactDesc1": "我们的网站上不直接显示具体价格，因为价格会随所需数量和目的地的不同而有较大差异。在您下单之前，我们需要计算运输成本并给您报价。您只需通过电子邮件将您的姓名、地址、所需产品型号和数量发送给我即可索取报价。在我们给出报价并得到您的确认后，就可以安排后续订单处理。如果您想了解更多信息，请随时发邮件给我！",
+    "contactDesc2": "如果贵单位有任何与我们产品线相关的特殊设计/定制需求，我们非常欢迎您的反馈和合作，万分感谢！",
+    "emailUs": "发送邮件给我",
+    "whatsappUs": "通过 WhatsApp 联系",
+    "contactInfo": {
+      "nameLabel": "公司名称",
+      "nameValue": "义乌市一驰贸易有限公司",
+      "addressLabel": "公司地址",
+      "addressValue": "中国浙江省金华市义乌市稠城街道篁园新村16栋",
+      "managerLabel": "联系人",
+      "managerValue": "Jenny Cao (曹经理)",
+      "mobileLabel": "手机",
+      "mobileValue": "+(86)-19136215806",
+      "whatsappLabel": "Whatsapp",
+      "whatsappValue": "+(86)-19136215806",
+      "wechatLabel": "微信号",
+      "wechatValue": "A1483923042",
+      "emailLabel": "电子邮箱",
+      "emailValue": "info@yichihealth.com",
+      "websiteLabel": "官方网站",
+      "websiteValue": "http://www.yichihealth.com"
+    }
   }
 }

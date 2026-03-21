@@ -76,6 +76,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <html lang={locale} suppressHydrationWarning>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                suppressHydrationWarning
             >
                 <ThemeProvider>
                     <NextIntlClientProvider>

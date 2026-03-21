@@ -1,6 +1,6 @@
 {
   "Metadata": {
-    "title": "GlobalTrade - International Trade Product Platform",
+    "title": "yichihealth - International Trade Product Platform",
     "description": "Professional foreign trade product platform, offering quality product browsing by category, connecting global suppliers and buyers."
   },
   "HomePage": {
@@ -11,6 +11,7 @@
     "contactUs": "Contact Us",
     "nav": {
       "products": "Products",
+      "about": "About Us",
       "contact": "Contact"
     },
     "stats": {
@@ -61,5 +62,64 @@
     "viewMore": "View More Products",
     "notFound": "Product Not Found",
     "notFoundDesc": "This product does not exist or has been removed"
+  },
+  "AboutPage": {
+    "heroTitle": "About Us",
+    "heroSubtitle": "Connecting Global Markets, Creating Infinite Possibilities",
+    "whyChooseUs": "WHY CHOOSE US",
+    "whyChooseUsDesc": "We offer exceptional quality and professional services.",
+    "features": {
+      "factory": {
+        "title": "FACTORY",
+        "desc": "Our company has its own factory, which covers a large area, has a large production capacity, and is conveniently located."
+      },
+      "quality": {
+        "title": "PRODUCT QUALITY",
+        "desc": "Our products have passed multiple international quality inspection standards."
+      },
+      "team": {
+        "title": "PROFESSIONAL TEAM",
+        "desc": "Our team provides the most advanced and sustainable customized manufacturing solutions."
+      },
+      "technology": {
+        "title": "TECHNOLOGY",
+        "desc": "We use advanced technology and production processes that cover both domestic and international fields."
+      }
+    },
+    "introText1": "Yiwu Yichi Health is a professional global supplier of medical consumables and devices, integrating international trade, supply chain integration and customized services. We provide one-stop medical solutions for global hospitals, clinics, nursing institutions and distributors, covering disposable medical supplies, household medical devices, clinical diagnostic equipment and basic medical instruments.",
+    "introText2": "Our core products include syringes, infusion sets, medical gloves, blood glucose meters, oximeters, IVD rapid test kits and more. All cooperative production bases comply with the ISO 13485 system, and core products have CE and FDA certifications, meeting international quality and compliance standards.",
+    "introText3": "Endowed with rich industry resources and mature trade experience, we have a stable global supply chain and strong OEM/ODM capabilities, providing personalized customization from material selection and design to packaging and labeling.",
+    "introText4": "Adhering to the tenet of \"Sincerity-Based, Quality First\", we are committed to offering high-quality, cost-effective medical products and building long-term win-win partnerships with global customers. With professional trade services and in-depth market regulation knowledge, we fully support your medical supply business. Welcome to contact us for customized cooperation and product consultation!",
+    "companyProfileTitle": "COMPANY PROFILE",
+    "companyProfileSubTitle": "Yichi Health --- Global Medical Consumables Supplier",
+    "companyProfileText": "ISO13485/CE/FDA certified, offering disposable medical supplies & diagnostic equipment. Strong OEM/ODM, stable supply chain. Sincerity-Based, Quality First – win-win global cooperation.",
+    "companyProfileViewMore": "VIEW MORE +",
+    "companyProfileWelcome": "Welcome to our company",
+    "companyProfileWatermark": "ABOUT US",
+    "factoryPhotos": "FACTORY PHOTOS",
+    "factoryPhotosDesc": "Advanced production equipment and rigorous manufacturing processes",
+    "contactUs": "CONTACT US",
+    "contactDesc1": "We do not have our prices displayed on this web site. Prices vary greatly with quantity required and destination. Before you order we need to compute shipping costs and then give you a quotation. You can ask for a quotation simply by emailing me your name, address, tools stock numbers and quantities required. After we have given you a quotation and you confirm it, we can proceed with the order. Email me if there is something more you want to know!",
+    "contactDesc2": "If your company has any special design related to our product range, we welcome your output, many thanks!",
+    "emailUs": "Email Us",
+    "whatsappUs": "Contact via WhatsApp",
+    "contactInfo": {
+      "nameLabel": "NAME",
+      "nameValue": "YIWU YICHI TRADING COMPANY",
+      "addressLabel": "ADDRESS",
+      "addressValue": "BUILDING 16, HUANGYUAN NEW VILLAGE, CHOUCHENG STREET, YIWU, JINHUA CITY, ZHEJIANG PROVINCE, CHINA",
+      "managerLabel": "MANAGER",
+      "managerValue": "JENNY CAO",
+      "mobileLabel": "Mobile",
+      "mobileValue": "+(86)-19136215806",
+      "whatsappLabel": "Whatsapp",
+      "whatsappValue": "+(86)-19136215806",
+      "wechatLabel": "Wechat",
+      "wechatValue": "A1483923042",
+      "emailLabel": "E-MAIL",
+      "emailValue": "info@yichihealth.com",
+      "websiteLabel": "WEBSITE",
+      "websiteValue": "http://www.yichihealth.com"
+    }
   }
 }

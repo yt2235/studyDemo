@@ -1,9 +1,10 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { supabase } from '@/supabase';
 import { notFound } from 'next/navigation';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { ProductImageGallery } from '@/components/ProductImageGallery';
+import MainNavbar from '@/components/MainNavbar';
+import MainFooter from '@/components/MainFooter';
+import { AppstoreOutlined, FileTextOutlined } from '@ant-design/icons';
 
 export const revalidate = 60;
 
@@ -87,34 +88,7 @@ export default async function ProductDetailPage({ params }: Props) {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-slate-950 transition-colors duration-500">
             {/* Navigation Bar */}
-            <nav className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-zinc-900/80 border-b border-zinc-200/50 dark:border-zinc-800/50 shadow-sm">
-                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <a href={`/${locale}`} className="flex items-center gap-3 group">
-                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/25 transition-transform duration-300 group-hover:scale-110">
-                                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                                </svg>
-                            </div>
-                            <span className="font-bold text-lg text-zinc-900 dark:text-zinc-100 tracking-tight">
-                                GlobalTrade
-                            </span>
-                        </a>
-                    </div>
-                    <div className="hidden md:flex items-center gap-6">
-                        <a href={`/${locale}#products`} className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                            {tHome('nav.products')}
-                        </a>
-                        <a href={`/${locale}#contact`} className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                            {tHome('nav.contact')}
-                        </a>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <LocaleSwitcher />
-                        <ThemeToggle />
-                    </div>
-                </div>
-            </nav>
+            <MainNavbar locale={locale} />
 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-6 py-8 md:py-16">
@@ -164,10 +138,8 @@ export default async function ProductDetailPage({ params }: Props) {
                         <div className="space-y-4 mb-10">
                             {/* Specification / Size */}
                             <div className="flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow duration-300">
-                                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-violet-500/20">
-                                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                                    </svg>
+                                <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0 border border-indigo-100 dark:border-indigo-800/50 transition-transform group-hover:scale-110">
+                                    <AppstoreOutlined className="text-2xl text-indigo-600 dark:text-indigo-400" />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
@@ -183,10 +155,8 @@ export default async function ProductDetailPage({ params }: Props) {
                             {/* Description */}
                             {typedProduct.description && (
                                 <div className="flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow duration-300">
-                                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
-                                        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
+                                    <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 border border-blue-100 dark:border-blue-800/50 transition-transform group-hover:scale-110">
+                                        <FileTextOutlined className="text-2xl text-blue-600 dark:text-blue-400" />
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
@@ -223,42 +193,7 @@ export default async function ProductDetailPage({ params }: Props) {
             </main>
 
             {/* Footer */}
-            <footer className="border-t border-zinc-200 dark:border-zinc-800 transition-colors duration-500 mt-16">
-                <div className="max-w-7xl mx-auto px-6 py-12">
-                    <div className="grid md:grid-cols-3 gap-8 mb-8">
-                        <div>
-                            <div className="flex items-center gap-2 mb-4">
-                                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center">
-                                    <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                                    </svg>
-                                </div>
-                                <span className="font-bold text-zinc-900 dark:text-zinc-100">GlobalTrade</span>
-                            </div>
-                            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                                {tHome('footer.companyDesc')}
-                            </p>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-4">{tHome('footer.quickLinks')}</h4>
-                            <div className="space-y-2">
-                                <a href={`/${locale}#products`} className="block text-sm text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{tHome('nav.products')}</a>
-                                <a href={`/${locale}#contact`} className="block text-sm text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{tHome('nav.contact')}</a>
-                            </div>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-4">{tHome('footer.contactInfo')}</h4>
-                            <div className="space-y-2 text-sm text-zinc-500 dark:text-zinc-400">
-                                <p>📧 info@globaltrade.com</p>
-                                <p>📱 +86 138-0000-0000</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="border-t border-zinc-200 dark:border-zinc-800 pt-8 text-center text-sm text-zinc-500 dark:text-zinc-500">
-                        © {new Date().getFullYear()} GlobalTrade. {tHome('footer.rights')}
-                    </div>
-                </div>
-            </footer>
+            <MainFooter locale={locale} />
         </div>
     );
 }
