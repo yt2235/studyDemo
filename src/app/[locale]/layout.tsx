@@ -37,8 +37,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
             template: `%s | ${t('title')}`,
         },
         description: t('description'),
+        keywords: t('keywords'),
         metadataBase: new URL(baseUrl),
         alternates: {
+            canonical: '/',
             languages: Object.fromEntries(
                 routing.locales.map((loc) => [loc, `/${loc}`])
             ),
@@ -46,19 +48,36 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         openGraph: {
             title: t('title'),
             description: t('description'),
+            url: '/',
+            siteName: 'yichihealth',
+            images: [
+                {
+                    url: '/logo.png',
+                    width: 800,
+                    height: 600,
+                    alt: 'yichihealth logo',
+                },
+            ],
             locale: locale,
             alternateLocale: routing.locales.filter((l) => l !== locale),
             type: 'website',
-            siteName: t('title'),
         },
         twitter: {
             card: 'summary_large_image',
             title: t('title'),
             description: t('description'),
+            images: ['/logo.png'],
         },
         robots: {
             index: true,
             follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+                'max-video-preview': -1,
+                'max-image-preview': 'large',
+                'max-snippet': -1,
+            },
         },
     };
 }
@@ -70,10 +89,35 @@ export default async function LocaleLayout({ children, params }: Props) {
         notFound();
     }
 
+    const t = await getTranslations({ locale, namespace: 'Metadata' });
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'yichihealth',
+        url: baseUrl,
+        logo: `${baseUrl}/logo.png`,
+        description: t('description'),
+        contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: '+86-19136215806',
+            contactType: 'customer service',
+            areaServed: 'Worldwide',
+            availableLanguage: ['Chinese', 'English']
+        }
+    };
+
     setRequestLocale(locale);
 
     return (
         <html lang={locale} suppressHydrationWarning>
+            <head>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                />
+            </head>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
                 suppressHydrationWarning

@@ -91,7 +91,7 @@ export default async function HomePage({ params }: Props) {
                                 </svg>
                             </a>
                             <a
-                                href="#contact"
+                                href={`/${locale}/contact`}
                                 className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 hover:-translate-y-0.5"
                             >
                                 {t('contactUs')}

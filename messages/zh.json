@@ -1,7 +1,11 @@
 {
   "Metadata": {
-    "title": "yichihealth - 全球贸易产品展示平台",
-    "description": "专业外贸产品展示平台，提供优质产品分类浏览，连接全球供应商与采购商。"
+    "title": "yichihealth - 全球医疗器械国际贸易展示平台",
+    "description": "专业外贸产品展示平台，提供优质医疗耗材、临床诊断设备等分类浏览，连接全球供应商与买家/采购商。",
+    "keywords": "yichihealth, 国际贸易, 医疗贸易, 医疗耗材, 诊断设备, 医疗器械, 全球贸易, 一驰健康, 医疗产品出口, 医疗器材, 义乌贸易",
+    "aboutTitle": "关于一驰健康 - 全球医疗耗材供应商",
+    "contactTitle": "联系一驰健康 - 获取报价及咨询",
+    "productsTitle": "产品中心 - 浏览优质医疗耗材及器材"
   },
   "HomePage": {
     "title": "全球优质产品",

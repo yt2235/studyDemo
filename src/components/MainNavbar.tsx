@@ -48,8 +48,11 @@ export default function MainNavbar({ locale }: MainNavbarProps) {
                         {t('nav.about')}
                     </a>
                     <a
-                        href={isHome ? "#contact" : `/${locale}#contact`}
-                        className="text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                        href={`/${locale}/contact`}
+                        className={`text-sm font-medium transition-colors ${pathname.includes('/contact')
+                            ? 'text-blue-600 dark:text-blue-400 font-semibold'
+                            : 'text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400'
+                            }`}
                     >
                         {t('nav.contact')}
                     </a>

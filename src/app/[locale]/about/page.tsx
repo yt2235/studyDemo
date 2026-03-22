@@ -1,20 +1,20 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import MainFooter from '@/components/MainFooter';
 import MainNavbar from '@/components/MainNavbar';
-import {
-    MailOutlined,
-    WhatsAppOutlined,
-    PhoneOutlined,
-    WechatOutlined,
-    HomeOutlined,
-    UserOutlined,
-    GlobalOutlined,
-    EnvironmentOutlined
-} from '@ant-design/icons';
 
 type Props = {
     params: Promise<{ locale: string }>;
 };
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'Metadata' });
+
+    return {
+        title: t('aboutTitle'),
+        description: t('description'), // Or a more specific about description if added
+    };
+}
 
 export default async function AboutPage({ params }: Props) {
     const { locale } = await params;
@@ -188,83 +188,6 @@ export default async function AboutPage({ params }: Props) {
                                     </div>
                                 </div>
                             ))}
-                        </div>
-                    </div>
-                </section>
-                {/* 5. CONTACT US */}
-                <section id="contact" className="py-24 bg-white dark:bg-zinc-900/50 transition-colors">
-                    <div className="max-w-7xl mx-auto px-6">
-                        <div className="grid lg:grid-cols-5 gap-12 items-start">
-                            {/* Left: Description and Main CTA */}
-                            <div className="lg:col-span-2">
-                                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 tracking-[0.2em] uppercase mb-4">
-                                    {t('contactUs')}
-                                </h2>
-                                <h3 className="text-3xl md:text-4xl font-bold text-zinc-900 dark:text-zinc-50 mb-8 leading-tight">
-                                    Get in Touch with Our Global Export Team
-                                </h3>
-                                <div className="space-y-6 text-zinc-600 dark:text-zinc-400 leading-relaxed text-justify mb-10">
-                                    <p>{t('contactDesc1')}</p>
-                                    <p>{t('contactDesc2')}</p>
-                                </div>
-                                <div className="flex flex-col sm:flex-row gap-4">
-                                    <a
-                                        href="mailto:info@yichihealth.com"
-                                        className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 hover:bg-blue-700 transition-all duration-300 hover:-translate-y-1"
-                                    >
-                                        <MailOutlined className="text-lg transition-transform group-hover:scale-110" />
-                                        {t('emailUs')}
-                                    </a>
-                                    <a
-                                        href="https://wa.me/8619136215806"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-full bg-white dark:bg-zinc-800 border-2 border-blue-600 text-blue-600 dark:text-blue-400 font-bold shadow-md hover:shadow-xl hover:shadow-blue-500/10 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 hover:-translate-y-1"
-                                    >
-                                        <WhatsAppOutlined className="text-lg transition-transform group-hover:scale-110" />
-                                        {t('whatsappUs')}
-                                    </a>
-                                </div>
-                            </div>
-
-                            {/* Right: Contact Detail Cards */}
-                            <div className="lg:col-span-3 grid sm:grid-cols-2 gap-4">
-                                {[
-                                    { id: 'name', icon: <HomeOutlined /> },
-                                    { id: 'address', icon: <EnvironmentOutlined />, span: true },
-                                    { id: 'manager', icon: <UserOutlined /> },
-                                    { id: 'mobile', icon: <PhoneOutlined />, href: 'tel:+8619136215806' },
-                                    { id: 'whatsapp', icon: <WhatsAppOutlined />, href: 'https://wa.me/8619136215806' },
-                                    { id: 'wechat', icon: <WechatOutlined /> },
-                                    { id: 'email', icon: <MailOutlined />, href: 'mailto:info@yichihealth.com' },
-                                    { id: 'website', icon: <GlobalOutlined />, href: 'http://www.yichihealth.com' },
-                                ].map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className={`p-6 rounded-3xl bg-zinc-50 dark:bg-zinc-800/40 border border-zinc-100 dark:border-zinc-800/60 hover:border-blue-500/30 transition-all group ${item.span ? 'sm:col-span-2' : ''}`}
-                                    >
-                                        <div className="flex items-center gap-5">
-                                            <div className="w-12 h-12 rounded-2xl bg-white dark:bg-zinc-700 shadow-sm flex items-center justify-center text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform flex-shrink-0 border border-zinc-100 dark:border-zinc-600">
-                                                {item.icon}
-                                            </div>
-                                            <div className="min-w-0">
-                                                <p className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-[0.2em] mb-1">
-                                                    {t(`contactInfo.${item.id}Label`)}
-                                                </p>
-                                                {item.href ? (
-                                                    <a href={item.href} target={item.id === 'website' ? '_blank' : undefined} rel="noopener noreferrer" className="text-zinc-900 dark:text-zinc-100 font-bold hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-words text-lg">
-                                                        {t(`contactInfo.${item.id}Value`)}
-                                                    </a>
-                                                ) : (
-                                                    <p className="text-zinc-900 dark:text-zinc-100 font-bold break-words text-lg">
-                                                        {t(`contactInfo.${item.id}Value`)}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
                         </div>
                     </div>
                 </section>

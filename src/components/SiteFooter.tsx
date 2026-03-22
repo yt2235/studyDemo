@@ -99,7 +99,7 @@ export default function SiteFooter({ locale }: SiteFooterProps) {
                 <nav className="flex items-center gap-6 text-sm text-zinc-400">
                     <a href={`/${locale}`} className="hover:text-blue-400 transition-colors">{tHome('nav.products')}</a>
                     <a href={`/${locale}/about`} className="hover:text-blue-400 transition-colors">{tHome('nav.about')}</a>
-                    <a href={`/${locale}/about#contact`} className="hover:text-blue-400 transition-colors">{tHome('nav.contact')}</a>
+                    <a href={`/${locale}/contact`} className="hover:text-blue-400 transition-colors">{tHome('nav.contact')}</a>
                 </nav>
 
                 <p className="text-xs text-zinc-600">
