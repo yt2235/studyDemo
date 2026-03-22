@@ -17,6 +17,7 @@
       "products": "产品中心",
       "about": "关于我们",
       "contact": "联系我们",
+      "news": "新闻资讯",
       "inquiry": "在线留言"
     },
     "stats": {
@@ -135,7 +136,7 @@
       "fastContact": "快速联系",
       "globalPresence": "全球业务",
       "globalTitle": "服务超过 50 个国家和地区",
-      "globalDesc": "我们成熟的全球供应链和专业贸易服务，确保优质医疗物资高效送达全球各个角落。"
+      "globalDesc": "我们成熟的全球供应链 and 专业贸易服务，确保优质医疗物资高效送达全球各个角落。"
     }
   },
   "InquiryPage": {
@@ -174,5 +175,15 @@
       "error": "提交失败，请重试或直接联系我们。",
       "required": "此项为必填"
     }
+  },
+  "NewsPage": {
+    "title": "新闻资讯",
+    "subtitle": "了解一驰健康的最新动态、行业洞察与技术突破",
+    "readMore": "阅读全文",
+    "noNews": "暂无相关新闻",
+    "backToList": "返回列表",
+    "publishedAt": "发布于",
+    "views": "阅读量",
+    "relatedNews": "相关资讯"
   }
 }

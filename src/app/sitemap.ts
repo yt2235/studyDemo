@@ -6,7 +6,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
 
     // Base routes
-    const routes = ['', '/about', '/contact', '/inquiry'];
+    const routes = ['', '/about', '/news', '/contact', '/inquiry'];
 
     // Localized static routes
     const staticEntries = routing.locales.flatMap((locale) =>
@@ -29,5 +29,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }))
     );
 
-    return [...staticEntries, ...productEntries];
+    // News routes
+    const { data: news } = await supabase.from('news').select('id, slug').eq('is_published', true);
+    const newsEntries = (news || []).flatMap((item) =>
+        routing.locales.map((locale) => ({
+            url: `${baseUrl}/${locale}/news/${item.slug || item.id}`,
+            lastModified: new Date(),
+            changeFrequency: 'daily' as const,
+            priority: 0.7,
+        }))
+    );
+
+    return [...staticEntries, ...productEntries, ...newsEntries];
 }

@@ -128,12 +128,12 @@ export default async function AboutPage({ params }: Props) {
                         </div>
 
                         <div className="flex flex-col lg:flex-row shadow-2xl relative">
-                            {/* Left: White Card */}
-                            <div className="bg-white text-zinc-900 p-10 md:p-16 lg:w-1/2 relative lg:static z-20 border-t-8 border-blue-600">
+                            {/* Left: Responsive Card */}
+                            <div className="bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 p-10 md:p-16 lg:w-1/2 relative lg:static z-20 border-t-8 border-blue-600 transition-colors duration-500">
                                 <h3 className="text-2xl md:text-3xl font-extrabold uppercase leading-snug mb-8">
                                     {t('companyProfileSubTitle')}
                                 </h3>
-                                <p className="text-base text-zinc-600 leading-relaxed mb-10 text-justify">
+                                <p className="text-base text-zinc-600 dark:text-zinc-400 leading-relaxed mb-10 text-justify">
                                     {t('companyProfileText')}
                                 </p>
                                 <a href="#contact" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 transition-colors">

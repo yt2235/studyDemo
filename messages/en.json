@@ -17,6 +17,7 @@
       "products": "Products",
       "about": "About Us",
       "contact": "Contact",
+      "news": "News",
       "inquiry": "Online Inquiry"
     },
     "stats": {
@@ -95,6 +96,7 @@
     "introText2": "Our core products include syringes, infusion sets, medical gloves, blood glucose meters, oximeters, IVD rapid test kits and more. All cooperative production bases comply with the ISO 13485 system, and core products have CE and FDA certifications, meeting international quality and compliance standards.",
     "introText3": "Endowed with rich industry resources and mature trade experience, we have a stable global supply chain and strong OEM/ODM capabilities, providing personalized customization from material selection and design to packaging and labeling.",
     "introText4": "Adhering to the tenet of \"Sincerity-Based, Quality First\", we are committed to offering high-quality, cost-effective medical products and building long-term win-win partnerships with global customers. With professional trade services and in-depth market regulation knowledge, we fully support your medical supply business. Welcome to contact us for customized cooperation and product consultation!",
+    "news": "News",
     "companyProfileTitle": "COMPANY PROFILE",
     "companyProfileSubTitle": "Yichi Health --- Global Medical Consumables Supplier",
     "companyProfileText": "ISO13485/CE/FDA certified, offering disposable medical supplies & diagnostic equipment. Strong OEM/ODM, stable supply chain. Sincerity-Based, Quality First – win-win global cooperation.",
@@ -174,5 +176,15 @@
       "error": "Submission failed. Please try again or contact us directly.",
       "required": "This field is required"
     }
+  },
+  "NewsPage": {
+    "title": "News & Trends",
+    "subtitle": "Discover latest updates, industry insights, and medical breakthroughs from Yichi Health",
+    "readMore": "Read Full Story",
+    "noNews": "No news articles found at the moment",
+    "backToList": "Back to List",
+    "publishedAt": "Published on",
+    "views": "Views",
+    "relatedNews": "Related News"
   }
 }
