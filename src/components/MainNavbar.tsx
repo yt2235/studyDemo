@@ -56,6 +56,15 @@ export default function MainNavbar({ locale }: MainNavbarProps) {
                     >
                         {t('nav.contact')}
                     </a>
+                    <a
+                        href={`/${locale}/inquiry`}
+                        className={`text-sm font-medium transition-colors ${pathname.includes('/inquiry')
+                            ? 'text-blue-600 dark:text-blue-400 font-semibold'
+                            : 'text-zinc-600 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400'
+                            }`}
+                    >
+                        {t('nav.inquiry')}
+                    </a>
                 </div>
                 <div className="flex items-center gap-3">
                     <LocaleSwitcher />

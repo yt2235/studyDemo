@@ -6,7 +6,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
 
     // Base routes
-    const routes = ['', '/about', '/contact'];
+    const routes = ['', '/about', '/contact', '/inquiry'];
 
     // Localized static routes
     const staticEntries = routing.locales.flatMap((locale) =>

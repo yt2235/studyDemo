@@ -16,7 +16,8 @@
     "nav": {
       "products": "Products",
       "about": "About Us",
-      "contact": "Contact"
+      "contact": "Contact",
+      "inquiry": "Online Inquiry"
     },
     "stats": {
       "products": "Quality Products",
@@ -124,6 +125,54 @@
       "emailValue": "info@yichihealth.com",
       "websiteLabel": "WEBSITE",
       "websiteValue": "http://www.yichihealth.com"
+    },
+    "contactPage": {
+      "home": "Home",
+      "breadcrumb": "Contact Us",
+      "heroDescription": "We're here to help you with your global health trade needs. Reach out to our expert team for dedicated support and solutions.",
+      "supportTeam": "Support Team",
+      "supportTitle": "Connecting Global Health Partners",
+      "fastContact": "Immediate Response",
+      "globalPresence": "Global Presence",
+      "globalTitle": "Serving Over 50+ Countries",
+      "globalDesc": "Our global trade expertise ensures high-quality medical supplies reach every continent efficiently."
+    }
+  },
+  "InquiryPage": {
+    "title": "Online Inquiry",
+    "subtitle": "Submit your requirements and our expert team will contact you within 24 hours.",
+    "form": {
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "companyName": "Company Name",
+      "companyNamePlaceholder": "Enter your organization/company name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your contact number",
+      "email": "Email Address (Optional)",
+      "emailPlaceholder": "example@email.com",
+      "orgType": "Organization Type",
+      "orgTypePlaceholder": "Select organization type",
+      "orgTypes": {
+        "hospital": "Hospital/Clinic",
+        "pharmacy": "Pharmacy",
+        "distributor": "Distributor/Agent",
+        "other": "Other"
+      },
+      "requirement": "Requirement Details",
+      "requirementPlaceholder": "Please describe your product needs, quantities, or specific questions...",
+      "timeline": "Expected Timeline",
+      "timelinePlaceholder": "Select expected procurement timeline",
+      "timelines": {
+        "immediate": "Immediate (Within 1 month)",
+        "soon": "Soon (1-3 months)",
+        "planning": "Planning Phase (3-6 months)",
+        "budgeting": "Budgeting (6+ months)"
+      },
+      "submit": "Submit Inquiry",
+      "submitting": "Submitting...",
+      "success": "Thank you! Your inquiry has been submitted successfully. Our team will contact you shortly.",
+      "error": "Submission failed. Please try again or contact us directly.",
+      "required": "This field is required"
     }
   }
 }

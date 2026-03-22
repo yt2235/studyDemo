@@ -196,7 +196,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
                         <div className="flex flex-col sm:flex-row gap-4">
                             <a
-                                href={`/${locale}/contact`}
+                                href={`/${locale}/inquiry`}
                                 className="group relative inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:-translate-y-0.5"
                             >
                                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

@@ -16,7 +16,8 @@
     "nav": {
       "products": "产品中心",
       "about": "关于我们",
-      "contact": "联系我们"
+      "contact": "联系我们",
+      "inquiry": "在线留言"
     },
     "stats": {
       "products": "优质产品",
@@ -124,6 +125,54 @@
       "emailValue": "info@yichihealth.com",
       "websiteLabel": "官方网站",
       "websiteValue": "http://www.yichihealth.com"
+    },
+    "contactPage": {
+      "home": "首页",
+      "breadcrumb": "联系我们",
+      "heroDescription": "我们致力于为您提供专业的全球医疗贸易支持。随时联系我们的专家团队，获取定制化解决方案。",
+      "supportTeam": "支持团队",
+      "supportTitle": "连接全球医疗合作伙伴",
+      "fastContact": "快速联系",
+      "globalPresence": "全球业务",
+      "globalTitle": "服务超过 50 个国家和地区",
+      "globalDesc": "我们成熟的全球供应链和专业贸易服务，确保优质医疗物资高效送达全球各个角落。"
+    }
+  },
+  "InquiryPage": {
+    "title": "在线留言",
+    "subtitle": "提交您的需求，我们的专家团队将在 24 小时内与您联系。",
+    "form": {
+      "fullName": "姓名",
+      "fullNamePlaceholder": "请输入您的姓名",
+      "companyName": "公司/机构名称",
+      "companyNamePlaceholder": "请输入您的公司或单位名称",
+      "phone": "联系电话",
+      "phonePlaceholder": "请输入您的联系方式",
+      "email": "电子邮箱 (选填)",
+      "emailPlaceholder": "example@email.com",
+      "orgType": "机构类型",
+      "orgTypePlaceholder": "请选择机构类型",
+      "orgTypes": {
+        "hospital": "医院/诊所",
+        "pharmacy": "药店",
+        "distributor": "经销商/代理商",
+        "other": "其他"
+      },
+      "requirement": "需求详情",
+      "requirementPlaceholder": "请详细描述您的产品需求、采购数量或具体问题...",
+      "timeline": "预计采购周期",
+      "timelinePlaceholder": "请选择预计采购时间",
+      "timelines": {
+        "immediate": "立即 (1个月内)",
+        "soon": "近期 (1-3个月)",
+        "planning": "计划中 (3-6个月)",
+        "budgeting": "预算阶段 (6个月以上)"
+      },
+      "submit": "提交留言",
+      "submitting": "提交中...",
+      "success": "提交成功！感谢您的关注，我们的团队将尽快与您联系。",
+      "error": "提交失败，请重试或直接联系我们。",
+      "required": "此项为必填"
     }
   }
 }

@@ -116,7 +116,7 @@ export default async function AboutPage({ params }: Props) {
                             {t('companyProfileTitle')}
                         </h2>
                         {/* Green underline */}
-                        <div className="w-24 h-1 bg-emerald-600 mx-auto mt-6"></div>
+                        <div className="w-24 h-1 bg-blue-600 mx-auto mt-6"></div>
                     </div>
 
                     <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -127,14 +127,14 @@ export default async function AboutPage({ params }: Props) {
 
                         <div className="flex flex-col lg:flex-row shadow-2xl relative">
                             {/* Left: White Card */}
-                            <div className="bg-white text-zinc-900 p-10 md:p-16 lg:w-1/2 relative lg:static z-20 border-t-8 border-emerald-600">
+                            <div className="bg-white text-zinc-900 p-10 md:p-16 lg:w-1/2 relative lg:static z-20 border-t-8 border-blue-600">
                                 <h3 className="text-2xl md:text-3xl font-extrabold uppercase leading-snug mb-8">
                                     {t('companyProfileSubTitle')}
                                 </h3>
                                 <p className="text-base text-zinc-600 leading-relaxed mb-10 text-justify">
                                     {t('companyProfileText')}
                                 </p>
-                                <a href="#contact" className="inline-block bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 transition-colors">
+                                <a href="#contact" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 transition-colors">
                                     {t('companyProfileViewMore')}
                                 </a>
                             </div>
@@ -149,7 +149,7 @@ export default async function AboutPage({ params }: Props) {
                                     className="absolute inset-0 w-full h-full object-cover"
                                 />
                                 {/* Bottom right green box */}
-                                <div className="absolute bottom-0 right-0 bg-emerald-600 text-white font-semibold py-4 px-6 md:px-10 text-lg shadow-lg">
+                                <div className="absolute bottom-0 right-0 bg-blue-600 text-white font-semibold py-4 px-6 md:px-10 text-lg shadow-lg">
                                     {t('companyProfileWelcome')}
                                 </div>
                             </div>

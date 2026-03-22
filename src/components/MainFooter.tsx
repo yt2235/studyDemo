@@ -36,6 +36,7 @@ export default function MainFooter({ locale }: MainFooterProps) {
                             <a href={`/${locale}#products`} className="block text-sm text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{tHome('nav.products')}</a>
                             <a href={`/${locale}/about`} className="block text-sm text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{tHome('nav.about')}</a>
                             <a href={`/${locale}/contact`} className="block text-sm text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{tHome('nav.contact')}</a>
+                            <a href={`/${locale}/inquiry`} className="block text-sm text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{tHome('nav.inquiry')}</a>
                         </div>
                     </div>
                     <div>
