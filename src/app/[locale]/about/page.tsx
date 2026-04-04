@@ -7,6 +7,8 @@ type Props = {
     params: Promise<{ locale: string }>;
 };
 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'Metadata' });
