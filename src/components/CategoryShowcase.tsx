@@ -61,6 +61,10 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
     const [activeL1, setActiveL1] = useState<string>(l1Cats[0]?.id || "");
     const [activeL2, setActiveL2] = useState<string | null>(null);
     const [activeL3, setActiveL3] = useState<string | null>(null);
+    const [isL1Expanded, setIsL1Expanded] = useState(false);
+
+    // Number of L1 categories to show in collapsed state
+    const L1_COLLAPSED_COUNT = 4;
 
     // Update activeL1 if it's empty but l1Cats is populated
     useEffect(() => {
@@ -143,19 +147,50 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
             ) : (
                 <div className="flex flex-col gap-8">
                     {/* Level 1: Broad Categories Top Bar */}
-                    <div className="flex items-center gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] p-3 md:p-4 bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:shadow-black/20 sticky top-16 z-40 transition-all duration-500">
-                        {l1Cats.map((cat) => (
-                            <button
-                                key={cat.id}
-                                onClick={() => handleL1Change(cat.id)}
-                                className={`whitespace-nowrap px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 relative shrink-0 ${activeL1 === cat.id
-                                    ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900 shadow-lg shadow-zinc-900/20 dark:shadow-white/20 scale-[1.02]"
-                                    : "bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800"
-                                    }`}
-                            >
-                                {cat.name}
-                            </button>
-                        ))}
+                    <div className="sticky top-16 z-40">
+                        <div className="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl shadow-sm dark:shadow-black/20 transition-all duration-500 p-3 md:p-4">
+                            <h3 className="text-sm font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-3">
+                                {locale === 'zh' ? '筛选分类' : 'Filter by Category'}
+                            </h3>
+                            <div className="flex flex-wrap gap-3">
+                                {(isL1Expanded ? l1Cats : l1Cats.slice(0, L1_COLLAPSED_COUNT)).map((cat) => (
+                                    <button
+                                        key={cat.id}
+                                        onClick={() => handleL1Change(cat.id)}
+                                        className={`whitespace-nowrap px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${activeL1 === cat.id
+                                            ? "bg-blue-600 text-white dark:bg-blue-500 dark:text-white shadow-lg shadow-blue-500/25 dark:shadow-blue-500/20 scale-[1.02]"
+                                            : "bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800"
+                                            }`}
+                                    >
+                                        {cat.name}
+                                    </button>
+                                ))}
+
+                                {/* Expand / Collapse Toggle */}
+                                {l1Cats.length > L1_COLLAPSED_COUNT && (
+                                    <button
+                                        onClick={() => setIsL1Expanded(!isL1Expanded)}
+                                        className="flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all duration-300 bg-zinc-100/80 dark:bg-zinc-800/80 text-zinc-500 dark:text-zinc-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 border border-dashed border-zinc-300 dark:border-zinc-700 hover:border-blue-300"
+                                    >
+                                        {isL1Expanded ? (
+                                            <>
+                                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                                                </svg>
+                                                {locale === 'zh' ? '收起' : 'Collapse'}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                                {locale === 'zh' ? `展开全部 (${l1Cats.length - L1_COLLAPSED_COUNT})` : `Show All (${l1Cats.length - L1_COLLAPSED_COUNT})`}
+                                            </>
+                                        )}
+                                    </button>
+                                )}
+                            </div>
+                        </div>
                     </div>
 
                     <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start">
