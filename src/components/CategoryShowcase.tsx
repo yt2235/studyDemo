@@ -74,29 +74,55 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
         const checkLayout = () => {
             if (containerRef.current) {
                 const container = containerRef.current;
-                
-                // Detect overflow based on current state
-                const isOverflowing = isL1Expanded 
-                    ? container.scrollHeight > 75 // Expanded: check vertical overflow (more than one row)
-                    : container.scrollWidth > container.clientWidth + 5; // Collapsed: check horizontal overflow
-                
-                setHasOverflow(isOverflowing);
-                
-                if (isOverflowing && !isL1Expanded) {
-                    // Approximate visible count by looking at children positions
-                    // But in nowrap clipped mode, it's harder to count "exactly" visible.
-                    // We can just estimate or use total - 1
-                    setVisibleCount(l1Cats.length); // We show all in the DOM, let CSS clip them
+
+                if (isL1Expanded) {
+                    // Expanded: just check if there's more than one row
+                    const isOverflowing = container.scrollHeight > 75;
+                    setHasOverflow(isOverflowing);
+                    setVisibleCount(l1Cats.length);
+                } else {
+                    // Collapsed: measure how many buttons FULLY fit
+                    // When hasOverflow=false, Show All button is NOT yet visible → pre-reserve its width
+                    // When hasOverflow=true, container already shrank via flex-1 → no extra reservation needed
+                    const showAllBtnWidth = hasOverflow ? 0 : 108;
+                    const availableWidth = container.clientWidth - showAllBtnWidth;
+
+                    // Only measure visible children (offsetWidth=0 means display:none)
+                    const children = Array.from(container.children).filter(
+                        (c) => (c as HTMLElement).offsetWidth > 0
+                    ) as HTMLElement[];
+
+                    let count = 0;
+                    for (const child of children) {
+                        const right = child.offsetLeft + child.offsetWidth;
+                        if (right <= availableWidth) {
+                            count++;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    const totalVisible = children.length;
+                    const total = l1Cats.length;
+                    // If all visible buttons fit and some are hidden, there's overflow
+                    const isOverflowing = totalVisible < total || (totalVisible === total && count < total);
+                    setHasOverflow(isOverflowing);
+                    setVisibleCount(isOverflowing ? count : l1Cats.length);
                 }
             }
         };
 
+        // Run twice: once immediately, once after layout stabilizes
         checkLayout();
+        const raf = requestAnimationFrame(checkLayout);
         const observer = new ResizeObserver(checkLayout);
         if (containerRef.current) observer.observe(containerRef.current);
-        
-        return () => observer.disconnect();
-    }, [l1Cats, isL1Expanded]);
+
+        return () => {
+            cancelAnimationFrame(raf);
+            observer.disconnect();
+        };
+    }, [l1Cats, isL1Expanded, hasOverflow]);
 
     // Sticky detection for L1 Bar
     useEffect(() => {
@@ -198,18 +224,18 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
                                 {locale === 'zh' ? '筛选分类' : 'Filter by Category'}
                             </h3>
                             <div className="flex items-start gap-3 w-full">
-                                <div 
+                                <div
                                     ref={containerRef}
-                                    className={`flex-1 flex gap-3 ${isL1Expanded ? "flex-wrap max-h-[2000px]" : "flex-nowrap overflow-hidden max-h-[60px]"} transition-all duration-300`}
+                                    className={`flex-1 flex gap-2 md:gap-3 ${isL1Expanded ? "flex-wrap" : "flex-nowrap"} overflow-hidden`}
                                 >
-                                    {l1Cats.map((cat) => (
+                                    {l1Cats.map((cat, index) => (
                                         <button
                                             key={cat.id}
                                             onClick={() => handleL1Change(cat.id)}
-                                            className={`whitespace-nowrap transition-all duration-300 rounded-xl font-semibold overflow-hidden ${isL1Sticky ? 'px-4 py-1.5 text-xs' : 'px-6 py-3 text-sm'} ${activeL1 === cat.id
+                                            className={`whitespace-nowrap transition-all duration-300 rounded-xl font-semibold shrink-0 ${isL1Sticky ? 'px-4 py-1.5 text-xs' : 'px-6 py-3 text-sm'} ${activeL1 === cat.id
                                                 ? "bg-blue-600 text-white dark:bg-blue-500 dark:text-white shadow-lg shadow-blue-500/25 dark:shadow-blue-500/20 scale-[1.02]"
                                                 : "bg-white dark:bg-zinc-950 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800"
-                                                }`}
+                                            } ${!isL1Expanded && hasOverflow && index >= visibleCount ? 'hidden' : ''}`}
                                         >
                                             {cat.name}
                                         </button>
@@ -217,10 +243,10 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
 
                                     {/* Expand / Collapse Toggle Inline (When Expanded) */}
                                     {isL1Expanded && hasOverflow && (
-                                            <button
-                                                onClick={() => setIsL1Expanded(!isL1Expanded)}
-                                                className={`whitespace-nowrap flex items-center gap-2 rounded-xl font-bold uppercase tracking-widest transition-all duration-300 bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 border border-dashed border-zinc-200 dark:border-zinc-700 hover:border-blue-300 shadow-sm shrink-0 ${isL1Sticky ? 'px-3 py-1.5 text-[8px]' : 'px-5 py-3 text-[10px]'}`}
-                                            >
+                                        <button
+                                            onClick={() => setIsL1Expanded(!isL1Expanded)}
+                                            className={`whitespace-nowrap flex items-center gap-2 rounded-xl font-bold uppercase tracking-widest transition-all duration-300 bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 dark:text-zinc-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-600 dark:hover:text-blue-400 border border-dashed border-zinc-200 dark:border-zinc-700 hover:border-blue-300 shadow-sm shrink-0 ${isL1Sticky ? 'px-3 py-1.5 text-[8px]' : 'px-5 py-3 text-[10px]'}`}
+                                        >
                                             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
                                             </svg>
@@ -247,9 +273,9 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
 
                     <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start">
                         {/* Sidebar: L2 and L3 Categories */}
-                        <aside className="w-full lg:w-72 shrink-0 flex flex-col gap-4 sticky top-32 z-30">
+                        <aside className="w-full lg:w-72 shrink-0 flex flex-col gap-4 sticky top-24 lg:top-32 z-30">
                             {currentL2s.length > 0 ? (
-                                <div className="bg-white/60 dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-800/50 rounded-3xl p-5 md:p-6 shadow-sm dark:shadow-black/20 overflow-hidden">
+                                <div className="bg-white/90 dark:bg-zinc-900/90 lg:bg-white/60 lg:dark:bg-zinc-900/60 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-800/50 rounded-2xl lg:rounded-3xl p-3 md:p-4 lg:p-6 shadow-sm dark:shadow-black/20 overflow-hidden">
                                     <div className="flex flex-col gap-4">
                                         {/* L2 Categories Row */}
                                         <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 no-scrollbar">
@@ -403,7 +429,7 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
 
                                             {/* Content */}
                                             <div className="p-4 flex flex-col flex-grow">
-                                                <h4 className="text-sm md:text-base font-bold text-zinc-900 dark:text-zinc-100 mb-1.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 leading-tight">
+                                                <h4 title={product.name} className="text-sm md:text-base font-bold text-zinc-900 dark:text-zinc-100 mb-1.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 leading-tight">
                                                     {product.name}
                                                 </h4>
                                                 <div className="flex flex-col gap-1 mt-auto pt-2 border-t border-zinc-100 dark:border-zinc-800">
