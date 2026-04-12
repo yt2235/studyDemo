@@ -18,7 +18,8 @@
       "about": "About Us",
       "contact": "Contact",
       "news": "News",
-      "inquiry": "Online Inquiry"
+      "inquiry": "Online Inquiry",
+      "faq": "FAQ"
     },
     "stats": {
       "products": "Quality Products",
@@ -186,5 +187,21 @@
     "publishedAt": "Published on",
     "views": "Views",
     "relatedNews": "Related News"
+  },
+  "FAQPage": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about our products, services, and cooperation process.",
+    "searchPlaceholder": "Search questions...",
+    "allCategories": "All Categories",
+    "noResults": "No matching questions found",
+    "categories": {
+      "Account": "Account",
+      "Logistics": "Logistics",
+      "Product": "Product",
+      "General": "General"
+    },
+    "stillHaveQuestions": "Still have questions?",
+    "contactSupport": "Contact Support",
+    "lastUpdated": "Last updated"
   }
 }

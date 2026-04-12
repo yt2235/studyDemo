@@ -25,6 +25,7 @@ export default function MainNavbar({ locale }: MainNavbarProps) {
         { label: t('nav.news'), href: `/${locale}/news`, active: pathname.includes('/news') },
         { label: t('nav.contact'), href: `/${locale}/contact`, active: pathname.includes('/contact') },
         { label: t('nav.inquiry'), href: `/${locale}/inquiry`, active: pathname.includes('/inquiry') },
+        { label: t('nav.faq'), href: `/${locale}/faq`, active: pathname.includes('/faq') },
     ];
 
     return (

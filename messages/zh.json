@@ -18,7 +18,8 @@
       "about": "关于我们",
       "contact": "联系我们",
       "news": "新闻资讯",
-      "inquiry": "在线留言"
+      "inquiry": "在线留言",
+      "faq": "常见问题"
     },
     "stats": {
       "products": "优质产品",
@@ -185,5 +186,21 @@
     "publishedAt": "发布于",
     "views": "阅读量",
     "relatedNews": "相关资讯"
+  },
+  "FAQPage": {
+    "title": "常见问题",
+    "subtitle": "在这里您可以找到关于我们产品、服务以及合作流程的常见解答。",
+    "searchPlaceholder": "搜索问题...",
+    "allCategories": "全部分类",
+    "noResults": "未找到相关问题",
+    "categories": {
+      "Account": "账户相关",
+      "Logistics": "物流配送",
+      "Product": "产品咨询",
+      "General": "通用问题"
+    },
+    "stillHaveQuestions": "还有其他问题？",
+    "contactSupport": "联系客服",
+    "lastUpdated": "最后更新"
   }
 }
