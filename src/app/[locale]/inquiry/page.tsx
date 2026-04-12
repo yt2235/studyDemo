@@ -29,7 +29,7 @@ export default async function InquiryPage({ params }: Props) {
 
             <main className="flex-grow">
                 {/* Hero Section */}
-                <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 overflow-hidden bg-zinc-50 dark:bg-zinc-900/40 border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors">
+                <section className="relative pt-10 pb-10 md:pt-20 md:pb-10 overflow-hidden bg-zinc-50 dark:bg-zinc-900/40 border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors">
                     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(59,130,246,0.05),transparent_50%)] pointer-events-none" />
 
                     <div className="max-w-7xl mx-auto px-6 relative z-10">

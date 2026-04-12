@@ -35,9 +35,9 @@ export default async function ContactPage({ params }: Props) {
         <div className="flex flex-col min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-500">
             <MainNavbar locale={locale} />
 
-            <main className="flex-grow pt-16">
+            <main className="flex-grow">
                 {/* 1. HERO SECTION */}
-                <section className="relative py-24 md:py-32 overflow-hidden bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors">
+                <section className="relative pt-10 pb-10 md:pt-20 md:pb-10 overflow-hidden bg-zinc-50 dark:bg-zinc-950 border-b border-zinc-200/50 dark:border-zinc-800/50 transition-colors">
                     <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-500/5 to-transparent pointer-events-none" />
                     <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/[0.03] rounded-full -translate-x-1/2 translate-y-1/2 blur-[80px] pointer-events-none" />
 
