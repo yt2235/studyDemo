@@ -33,6 +33,19 @@ export default async function NewsListingPage({ params }: Props) {
         .eq('is_published', true)
         .order('published_at', { ascending: false });
 
+    // Helper to parse images (could be string or JSON array string)
+    const parseImages = (imageField: any): string[] => {
+        if (!imageField) return [];
+        if (Array.isArray(imageField)) return imageField;
+        try {
+            const parsed = JSON.parse(imageField);
+            if (Array.isArray(parsed)) return parsed;
+        } catch (e) {
+            // ignore
+        }
+        return [imageField];
+    };
+
     return (
         <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex flex-col">
             <MainNavbar locale={locale} />
@@ -70,7 +83,7 @@ export default async function NewsListingPage({ params }: Props) {
                                     <div className="aspect-[16/10] overflow-hidden relative bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
                                         {item.cover_image ? (
                                             <img
-                                                src={item.cover_image}
+                                                src={parseImages(item.cover_image)[0] || ""}
                                                 alt={item.title}
                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                             />
@@ -91,10 +104,6 @@ export default async function NewsListingPage({ params }: Props) {
                                             <span className="flex items-center gap-1.5">
                                                 <CalendarOutlined />
                                                 {new Date(item.published_at || item.created_at).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US')}
-                                            </span>
-                                            <span className="flex items-center gap-1.5">
-                                                <EyeOutlined />
-                                                {item.view_count || 0}
                                             </span>
                                         </div>
 

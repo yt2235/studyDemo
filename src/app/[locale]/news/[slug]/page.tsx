@@ -13,13 +13,14 @@ type Props = {
 export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }) {
-    const { locale, slug } = await params;
+    const { locale, slug: rawSlug } = await params;
+    const slug = decodeURIComponent(rawSlug);
 
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(slug);
     const { data: news } = await supabase
         .from('news')
         .select('title, summary')
-        .or(`slug.eq.${slug}${isUuid ? `,id.eq.${slug}` : ''}`)
+        .or(`slug.eq."${slug}"${isUuid ? `,id.eq.${slug}` : ''}`)
         .single();
 
     if (!news) return {};
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function NewsDetailPage({ params }: Props) {
-    const { locale, slug } = await params;
+    const { locale, slug: rawSlug } = await params;
+    const slug = decodeURIComponent(rawSlug);
     setRequestLocale(locale);
 
     const t = await getTranslations('NewsPage');
@@ -41,7 +43,7 @@ export default async function NewsDetailPage({ params }: Props) {
     const { data: news } = await supabase
         .from('news')
         .select('*')
-        .or(`slug.eq.${slug}${isUuid ? `,id.eq.${slug}` : ''}`)
+        .or(`slug.eq."${slug}"${isUuid ? `,id.eq.${slug}` : ''}`)
         .single();
 
     if (!news) {
@@ -63,23 +65,62 @@ export default async function NewsDetailPage({ params }: Props) {
         .neq('id', news.id)
         .limit(2);
 
+    // Helper to parse images (could be string or JSON array string)
+    const parseImages = (imageField: any): string[] => {
+        if (!imageField) return [];
+        if (Array.isArray(imageField)) return imageField;
+        try {
+            const parsed = JSON.parse(imageField);
+            if (Array.isArray(parsed)) return parsed;
+        } catch (e) {
+            // ignore
+        }
+        return [imageField];
+    };
+
     // Helper to format content (handle plain text with newlines or HTML)
-    const renderContent = (content: string) => {
+    const renderContent = (content: string, images: string[]) => {
         if (!content) return null;
         const hasHtmlTags = /<[a-z][\s\S]*>/i.test(content);
+        
         if (hasHtmlTags) {
-            return <div dangerouslySetInnerHTML={{ __html: content }} />;
+            return (
+                <div className="relative">
+                    {images.map((img, idx) => (
+                         <div key={idx} className={`md:mb-8 mb-10 w-full md:w-80 lg:w-96 rounded-2xl overflow-hidden shadow-xl border border-zinc-100 dark:border-zinc-800 ring-4 ring-white dark:ring-zinc-900 ${idx % 2 === 0 ? 'md:float-right md:ml-8' : 'md:float-left md:mr-8'}`}>
+                             <img src={img} alt="" className="w-full h-auto" />
+                         </div>
+                    ))}
+                    <div dangerouslySetInnerHTML={{ __html: content }} />
+                </div>
+            );
         }
+
+        const paragraphs = content.split('\n').filter(line => line.trim() !== '');
+        const imgDistGap = Math.max(1, Math.floor(paragraphs.length / Math.max(1, images.length)));
+
         return (
-            <div className="whitespace-pre-wrap leading-relaxed">
-                {content.split('\n').map((line, i) => (
-                    <p key={i} className={line.trim() === '' ? 'h-4' : 'mb-6'}>
-                        {line}
-                    </p>
-                ))}
+            <div className="whitespace-pre-wrap leading-relaxed space-y-4">
+                {paragraphs.map((para, i) => {
+                    const imgIndex = Math.floor(i / imgDistGap);
+                    const showImage = i % imgDistGap === 0 && imgIndex < images.length;
+                    
+                    return (
+                        <div key={i}>
+                            {showImage && (
+                                <div className={`md:mb-6 mb-8 w-full md:w-80 lg:w-96 rounded-2xl overflow-hidden shadow-xl border border-zinc-100 dark:border-zinc-800 ring-4 ring-white dark:ring-zinc-900 ${imgIndex % 2 === 0 ? 'md:float-right md:ml-8' : 'md:float-left md:mr-8'}`}>
+                                    <img src={images[imgIndex]} alt="" className="w-full h-auto" />
+                                </div>
+                            )}
+                            <p>{para}</p>
+                        </div>
+                    );
+                })}
             </div>
         );
     };
+
+    const newsImages = parseImages(news.cover_image);
 
     return (
         <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col">
@@ -106,31 +147,15 @@ export default async function NewsDetailPage({ params }: Props) {
                                 <CalendarOutlined className="text-blue-500" />
                                 <span>{new Date(news.published_at || news.created_at).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US')}</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <EyeOutlined className="text-blue-500" />
-                                <span>{news.view_count || 0} {t('views')}</span>
-                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="max-w-4xl mx-auto px-6 py-16">
-                    {/* Floating image layout */}
-                    <div className="clearfix">
-                        {news.cover_image && (
-                            <div className="md:float-right md:ml-8 mb-8 md:mb-6 w-full md:w-80 lg:w-96 rounded-2xl overflow-hidden shadow-xl border border-zinc-100 dark:border-zinc-800 ring-4 ring-white dark:ring-zinc-900">
-                                <img
-                                    src={news.cover_image}
-                                    alt={news.title}
-                                    className="w-full h-auto object-cover"
-                                />
-                            </div>
-                        )}
+                    <article className="prose prose-zinc md:prose-lg dark:prose-invert max-w-none prose-p:text-zinc-600 dark:prose-p:text-zinc-400 prose-p:leading-relaxed prose-headings:text-zinc-900 dark:prose-headings:text-zinc-50 mb-16 clearfix">
+                        {renderContent(news.content, newsImages)}
+                    </article>
 
-                        <article className="prose prose-zinc md:prose-lg dark:prose-invert max-w-none prose-p:text-zinc-600 dark:prose-p:text-zinc-400 prose-p:leading-relaxed prose-headings:text-zinc-900 dark:prose-headings:text-zinc-50">
-                            {renderContent(news.content)}
-                        </article>
-                    </div>
 
                     {/* Related News */}
                     {relatedNews && relatedNews.length > 0 && (
@@ -147,7 +172,11 @@ export default async function NewsDetailPage({ params }: Props) {
                                     >
                                         <div className="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-zinc-100 dark:bg-zinc-800">
                                             {item.cover_image && (
-                                                <img src={item.cover_image} alt={item.title} className="w-full h-full object-cover" />
+                                                <img 
+                                                    src={parseImages(item.cover_image)[0] || ""} 
+                                                    alt={item.title} 
+                                                    className="w-full h-full object-cover" 
+                                                />
                                             )}
                                         </div>
                                         <div className="flex flex-col justify-center">

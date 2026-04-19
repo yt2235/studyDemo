@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo } from 'react';
 import { useTranslations } from 'next-intl';
 import { supabase } from '@/supabase';
 import { 
@@ -24,6 +24,84 @@ interface FAQClientProps {
     locale: string;
 }
 
+function formatAnswer(answer: string): string {
+    // If already contains HTML tags, return as-is
+    if (/<[a-z][\s\S]*>/i.test(answer)) return answer;
+    // Convert \n\n to paragraphs, single \n to <br>
+    return answer
+        .split(/\n\n+/)
+        .map(para => `<p>${para.replace(/\n/g, '<br />')}</p>`)
+        .join('');
+}
+
+// Optimized FAQ Item component with memoization and smoother animations
+const FAQItem = memo(({ 
+    faq, 
+    isExpanded, 
+    onToggle, 
+    t, 
+    locale 
+}: { 
+    faq: FAQ; 
+    isExpanded: boolean; 
+    onToggle: (id: string) => void; 
+    t: any;
+    locale: string;
+}) => {
+    return (
+        <div
+            className={`group overflow-hidden rounded-[1.5rem] border transition-all duration-300 ${isExpanded
+                ? 'bg-blue-50/30 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800/50 shadow-lg shadow-blue-500/5'
+                : 'bg-white dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800/80 hover:border-blue-200 dark:hover:border-zinc-700'
+                }`}
+        >
+            <button
+                onClick={() => onToggle(faq.id)}
+                className="w-full text-left p-6 md:p-8 flex items-start gap-4 md:gap-6 focus:outline-none"
+            >
+                <div className={`mt-1 w-8 h-8 shrink-0 rounded-xl flex items-center justify-center transition-colors ${isExpanded
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 group-hover:text-blue-600'
+                    }`}>
+                    <QuestionCircleOutlined className="text-lg" />
+                </div>
+                <div className="flex-grow">
+                    <h3 className={`text-lg md:text-xl font-bold transition-colors ${isExpanded
+                        ? 'text-blue-700 dark:text-blue-400'
+                        : 'text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600'
+                        }`}>
+                        {faq.question}
+                    </h3>
+                    <div className={`mt-2 flex items-center gap-4 text-[10px] font-black uppercase tracking-widest transition-opacity ${isExpanded ? 'opacity-100' : 'opacity-40'}`}>
+                        <span className="text-blue-600 dark:text-blue-400">{t(`categories.${faq.category}`) || faq.category}</span>
+                    </div>
+                </div>
+                <div className="mt-1">
+                    {isExpanded ? (
+                        <MinusOutlined className="text-blue-500" />
+                    ) : (
+                        <PlusOutlined className="text-zinc-300 group-hover:text-blue-400" />
+                    )}
+                </div>
+            </button>
+            
+            {/* Smooth Grid-based Height Transition (performance optimized) */}
+            <div className={`grid transition-all duration-500 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                <div className="overflow-hidden">
+                    <div className="px-6 pb-6 md:px-20 md:pb-10">
+                        <div 
+                            className="prose prose-zinc dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400 leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: formatAnswer(faq.answer) }}
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+});
+
+FAQItem.displayName = 'FAQItem';
+
 export default function FAQClient({ faqs, locale }: FAQClientProps) {
     const t = useTranslations('FAQPage');
     const [searchQuery, setSearchQuery] = useState('');
@@ -40,34 +118,39 @@ export default function FAQClient({ faqs, locale }: FAQClientProps) {
     const filteredFaqs = useMemo(() => {
         return faqs.filter(faq => {
             const matchesSearch = faq.question.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                faq.answer.toLowerCase().includes(searchQuery.toLowerCase());
+                                 faq.answer.toLowerCase().includes(searchQuery.toLowerCase());
             const matchesCategory = activeCategory ? faq.category === activeCategory : true;
             return matchesSearch && matchesCategory;
         });
     }, [faqs, searchQuery, activeCategory]);
 
-    const toggleExpand = async (id: string) => {
-        const next = new Set(expandedIds);
-        if (next.has(id)) {
-            next.delete(id);
-        } else {
-            next.add(id);
-            // Increment view count when expanded
-            try {
-                await supabase.rpc('increment_faq_view_count', { row_id: id }).then(({ error }) => {
-                    if (error) {
-                         // Fallback if RPC doesn't exist
-                         const faq = faqs.find(f => f.id === id);
-                         if (faq) {
-                            supabase.from('faqs').update({ view_count: (faq.view_count || 0) + 1 }).eq('id', id);
-                         }
-                    }
-                });
-            } catch (err) {
-                console.error('Failed to increment view count', err);
+    const toggleExpand = (id: string) => {
+        setExpandedIds(prev => {
+            const next = new Set(prev);
+            if (next.has(id)) {
+                next.delete(id);
+            } else {
+                next.add(id);
+                // Increment view count triggered in background
+                handleIncrementView(id);
             }
+            return next;
+        });
+    };
+
+    const handleIncrementView = async (id: string) => {
+        try {
+            const { error } = await supabase.rpc('increment_faq_view_count', { row_id: id });
+            if (error) {
+                // Fallback direct update
+                const faq = faqs.find(f => f.id === id);
+                if (faq) {
+                    await supabase.from('faqs').update({ view_count: (faq.view_count || 0) + 1 }).eq('id', id);
+                }
+            }
+        } catch (err) {
+            console.error('Failed to increment view count', err);
         }
-        setExpandedIds(next);
     };
 
     return (
@@ -113,57 +196,16 @@ export default function FAQClient({ faqs, locale }: FAQClientProps) {
             {/* FAQ List */}
             <div className="space-y-4">
                 {filteredFaqs.length > 0 ? (
-                    filteredFaqs.map((faq) => {
-                        const isExpanded = expandedIds.has(faq.id);
-                        return (
-                            <div
-                                key={faq.id}
-                                className={`group overflow-hidden rounded-[1.5rem] border transition-all duration-500 ${isExpanded
-                                    ? 'bg-blue-50/30 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800/50 shadow-lg shadow-blue-500/5'
-                                    : 'bg-white dark:bg-zinc-900/50 border-zinc-100 dark:border-zinc-800/80 hover:border-blue-200 dark:hover:border-zinc-700'
-                                    }`}
-                            >
-                                <button
-                                    onClick={() => toggleExpand(faq.id)}
-                                    className="w-full text-left p-6 md:p-8 flex items-start gap-4 md:gap-6 focus:outline-none"
-                                >
-                                    <div className={`mt-1 w-8 h-8 shrink-0 rounded-xl flex items-center justify-center transition-colors ${isExpanded
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/30 group-hover:text-blue-600'
-                                        }`}>
-                                        <QuestionCircleOutlined className="text-lg" />
-                                    </div>
-                                    <div className="flex-grow">
-                                        <h3 className={`text-lg md:text-xl font-bold transition-colors ${isExpanded
-                                            ? 'text-blue-700 dark:text-blue-400'
-                                            : 'text-zinc-900 dark:text-zinc-100 group-hover:text-blue-600'
-                                            }`}>
-                                            {faq.question}
-                                        </h3>
-                                        <div className={`mt-2 flex items-center gap-4 text-[10px] font-black uppercase tracking-widest transition-opacity ${isExpanded ? 'opacity-100' : 'opacity-40'}`}>
-                                            <span className="text-blue-600 dark:text-blue-400">{t(`categories.${faq.category}`) || faq.category}</span>
-                                        </div>
-                                    </div>
-                                    <div className="mt-1">
-                                        {isExpanded ? (
-                                            <MinusOutlined className="text-blue-500" />
-                                        ) : (
-                                            <PlusOutlined className="text-zinc-300 group-hover:text-blue-400" />
-                                        )}
-                                    </div>
-                                </button>
-                                
-                                <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                                    <div className="px-6 pb-6 md:px-20 md:pb-10">
-                                        <div 
-                                            className="prose prose-zinc dark:prose-invert max-w-none text-zinc-600 dark:text-zinc-400 leading-relaxed"
-                                            dangerouslySetInnerHTML={{ __html: faq.answer }}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })
+                    filteredFaqs.map((faq) => (
+                        <FAQItem 
+                            key={faq.id}
+                            faq={faq}
+                            isExpanded={expandedIds.has(faq.id)}
+                            onToggle={toggleExpand}
+                            t={t}
+                            locale={locale}
+                        />
+                    ))
                 ) : (
                     <div className="py-24 text-center bg-zinc-50 dark:bg-zinc-900/30 rounded-[3rem] border border-dashed border-zinc-200 dark:border-zinc-800">
                         <div className="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
