@@ -36,14 +36,18 @@ export default async function NewsListingPage({ params }: Props) {
     // Helper to parse images (could be string or JSON array string)
     const parseImages = (imageField: any): string[] => {
         if (!imageField) return [];
-        if (Array.isArray(imageField)) return imageField;
-        try {
-            const parsed = JSON.parse(imageField);
-            if (Array.isArray(parsed)) return parsed;
-        } catch (e) {
-            // ignore
+        let images: any[] = [];
+        if (Array.isArray(imageField)) {
+            images = imageField;
+        } else {
+            try {
+                const parsed = JSON.parse(imageField);
+                images = Array.isArray(parsed) ? parsed : [imageField];
+            } catch (e) {
+                images = [imageField];
+            }
         }
-        return [imageField];
+        return images.filter((img: any) => typeof img === 'string' && img.trim() !== '');
     };
 
     return (
@@ -81,20 +85,27 @@ export default async function NewsListingPage({ params }: Props) {
                                 >
                                     {/* Cover Image or Placeholder */}
                                     <div className="aspect-[16/10] overflow-hidden relative bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
-                                        {item.cover_image ? (
-                                            <img
-                                                src={parseImages(item.cover_image)[0] || ""}
-                                                alt={item.title}
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                            />
-                                        ) : (
-                                            <div className="flex flex-col items-center justify-center p-8 text-zinc-300 dark:text-zinc-700">
-                                                <div className="w-16 h-16 rounded-2xl bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center mb-2 shadow-inner">
-                                                    <span className="text-3xl font-extrabold tracking-tighter opacity-50">YH</span>
+                                        {(() => {
+                                            const images = parseImages(item.cover_image);
+                                            const thumb = images[0];
+                                            if (thumb) {
+                                                return (
+                                                    <img
+                                                        src={thumb}
+                                                        alt={item.title}
+                                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                    />
+                                                );
+                                            }
+                                            return (
+                                                <div className="flex flex-col items-center justify-center p-8 text-zinc-300 dark:text-zinc-700">
+                                                    <div className="w-16 h-16 rounded-2xl bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center mb-2 shadow-inner">
+                                                        <span className="text-3xl font-extrabold tracking-tighter opacity-50">YH</span>
+                                                    </div>
+                                                    <span className="text-xs font-semibold uppercase tracking-widest opacity-30">News & Trends</span>
                                                 </div>
-                                                <span className="text-xs font-semibold uppercase tracking-widest opacity-30">News & Trends</span>
-                                            </div>
-                                        )}
+                                            );
+                                        })()}
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     </div>
 
