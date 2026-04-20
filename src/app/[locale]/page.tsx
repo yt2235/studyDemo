@@ -3,6 +3,7 @@ import { supabase } from '@/supabase';
 import { CategoryShowcase, Category, Product } from '@/components/CategoryShowcase';
 import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
+import { parseImageUrl } from '@/lib/image';
 
 export const revalidate = 60;
 
@@ -19,30 +20,6 @@ interface ProductRaw {
     category: string; // Fallback
 }
 
-function parseImageUrl(raw: string): string[] {
-    const OLD_DOMAIN = 'https://2c0df8ba15ecf22a6936d57e5b5cc503.r2.cloudflarestorage.com/yichi/';
-    const NEW_DOMAIN = 'https://assets.yichi.site/';
-
-    const fixUrl = (url: string) => {
-        if (!url) return '';
-        if (url.startsWith(OLD_DOMAIN)) {
-            return url.replace(OLD_DOMAIN, NEW_DOMAIN);
-        }
-        return url;
-    };
-
-    try {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-            return parsed.map(fixUrl).filter(url => url.startsWith(NEW_DOMAIN));
-        }
-        const fixed = fixUrl(raw);
-        return fixed.startsWith(NEW_DOMAIN) ? [fixed] : [];
-    } catch {
-        const fixed = fixUrl(raw);
-        return fixed.startsWith(NEW_DOMAIN) ? [fixed] : [];
-    }
-}
 
 export default async function HomePage({ params }: Props) {
     const { locale } = await params;

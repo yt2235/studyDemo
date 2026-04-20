@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { supabase } from '@/supabase';
 import MainFooter from '@/components/MainFooter';
 import MainNavbar from '@/components/MainNavbar';
+import { fixImageUrl } from '@/lib/image';
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -30,7 +31,7 @@ export default async function AboutPage({ params }: Props) {
         .from('factory_photos')
         .select('image_url');
 
-    const factoryPhotos = photosData?.map(item => item.image_url) || [
+    const factoryPhotos = photosData?.map(item => fixImageUrl(item.image_url)) || [
         "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=600",
         "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80&w=600",
         "https://images.unsplash.com/photo-1565439390119-c63bf7019623?auto=format&fit=crop&q=80&w=600",
