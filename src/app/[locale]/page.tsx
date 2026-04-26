@@ -60,68 +60,50 @@ export default async function HomePage({ params }: Props) {
     }));
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-slate-950 transition-colors duration-500">
+        <div className="min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-500">
             {/* Navigation Bar */}
             <MainNavbar locale={locale} />
 
-            {/* Hero Section */}
-            <main className="max-w-7xl mx-auto px-6">
-                <section className="pt-20 pb-16 md:pt-28 md:pb-24">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 leading-[1.1] mb-6 animate-slide-up">
-                            {t('title')}
-                            <br />
-                            <span className="bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500 dark:from-blue-400 dark:via-cyan-400 dark:to-teal-400 bg-clip-text text-transparent">
-                                {t('subtitle')}
-                            </span>
+            <main>
+                {/* Hero Section - Full Image Display, No Cropping */}
+                <section className="w-full bg-white dark:bg-zinc-950">
+                    <div className="relative w-full">
+                        <img 
+                            src="/home-bg.png" 
+                            alt="Yichi Health Banner" 
+                            className="w-full h-auto block animate-fade-in" 
+                        />
+                        {/* Visually Hidden H1 for SEO */}
+                        <h1 className="sr-only">
+                            {t('title')} {t('subtitle')}
                         </h1>
-
-                        {/* Description */}
-                        <p className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-2xl mx-auto mb-10 animate-slide-up-delay">
-                            {t('description')}
-                        </p>
-
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up-delay-2">
-                            <a
-                                href="#products"
-                                className="group relative inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:-translate-y-0.5"
-                            >
-                                {t('viewProducts')}
-                                <svg
-                                    className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth={2.5}
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                </svg>
-                            </a>
-                            <a
-                                href={`/${locale}/contact`}
-                                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 hover:-translate-y-0.5"
-                            >
-                                {t('contactUs')}
-                            </a>
-                        </div>
                     </div>
+                </section>
 
-                    {/* Stats */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 animate-slide-up-delay-2">
-                        {[
-                            { value: '500+', label: t('stats.products') },
-                            { value: '50+', label: t('stats.countries') },
-                            { value: '10+', label: t('stats.years') },
-                            { value: '98%', label: t('stats.satisfaction') },
-                        ].map((stat) => (
-                            <div key={stat.label} className="text-center p-6 rounded-2xl bg-white/60 dark:bg-zinc-900/60 backdrop-blur border border-zinc-200/50 dark:border-zinc-800/50">
-                                <div className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent mb-1">
-                                    {stat.value}
-                                </div>
-                                <div className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">{stat.label}</div>
-                            </div>
-                        ))}
+                {/* New CTA Section - Below the image */}
+                <section className="bg-white dark:bg-zinc-950 py-16">
+                    <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-center gap-6">
+                        <a
+                            href="#products"
+                            className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold text-lg shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-1 active:scale-95"
+                        >
+                            <span>{t('viewProducts')}</span>
+                            <svg
+                                className="w-5 h-5 transition-transform duration-500 group-hover:translate-x-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                strokeWidth={2.5}
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </a>
+                        <a
+                            href={`/${locale}/contact`}
+                            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full border-2 border-blue-600 text-blue-600 dark:text-blue-400 font-bold text-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 hover:-translate-y-1 active:scale-95"
+                        >
+                            {t('contactUs')}
+                        </a>
                     </div>
                 </section>
 
