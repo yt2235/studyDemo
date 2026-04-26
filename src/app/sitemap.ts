@@ -5,7 +5,7 @@ import { routing } from '@/i18n/routing';
 export const revalidate = 60;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yichihealth.com';
 
     // Base routes
     const routes = ['', '/about', '/news', '/contact', '/inquiry', '/faq'];
@@ -22,37 +22,76 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         return { languages };
     };
 
+    // Helper to parse images
+    const parseImages = (imageField: any): string[] => {
+        if (!imageField) return [];
+        if (Array.isArray(imageField)) return imageField;
+        try {
+            const parsed = JSON.parse(imageField);
+            if (Array.isArray(parsed)) return parsed;
+        } catch (e) {
+            // ignore
+        }
+        return [imageField];
+    };
+
+    // Helper to clean slug/id for URL
+    const cleanPathSegment = (segment: string) => encodeURIComponent(segment.replace(/\s+/g, '-'));
+
+    // Combined Entries
+    let entries: MetadataRoute.Sitemap = [];
+
     // Static Routes
-    const staticEntries = routes.map((route) => ({
-        url: getLocalizedUrl('', routing.defaultLocale) + route, // Canonical as default locale
-        lastModified: new Date(),
-        changeFrequency: 'weekly' as const,
-        priority: route === '' ? 1 : 0.8,
-        alternates: getAlternates(route),
-    }));
+    for (const locale of routing.locales) {
+        for (const route of routes) {
+            entries.push({
+                url: getLocalizedUrl(route, locale),
+                lastModified: new Date(),
+                changeFrequency: 'weekly' as const,
+                priority: route === '' ? 1 : 0.8,
+                alternates: getAlternates(route),
+            });
+        }
+    }
 
     // Product routes
-    const { data: products } = await supabase.from('products').select('id');
-    const productEntries = (products || []).map((product) => ({
-        url: getLocalizedUrl(`/product/${product.id}`, routing.defaultLocale),
-        lastModified: new Date(),
-        changeFrequency: 'daily' as const,
-        priority: 0.6,
-        alternates: getAlternates(`/product/${product.id}`),
-    }));
+    const { data: products } = await supabase.from('products').select('id, image_url, updated_at');
+    if (products) {
+        for (const product of products) {
+            const productImages = parseImages(product.image_url);
+            for (const locale of routing.locales) {
+                entries.push({
+                    url: getLocalizedUrl(`/product/${product.id}`, locale),
+                    lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
+                    changeFrequency: 'daily' as const,
+                    priority: 0.6,
+                    alternates: getAlternates(`/product/${product.id}`),
+                    images: productImages,
+                });
+            }
+        }
+    }
 
     // News routes
-    const { data: news } = await supabase.from('news').select('id, slug').eq('is_published', true);
-    const newsEntries = (news || []).map((item) => {
-        const path = `/news/${item.slug || item.id}`;
-        return {
-            url: getLocalizedUrl(path, routing.defaultLocale),
-            lastModified: new Date(),
-            changeFrequency: 'daily' as const,
-            priority: 0.7,
-            alternates: getAlternates(path),
-        };
-    });
+    const { data: news } = await supabase.from('news').select('id, slug, cover_image, updated_at, created_at').eq('is_published', true);
+    if (news) {
+        for (const item of news) {
+            const slugOrId = cleanPathSegment(item.slug || String(item.id));
+            const path = `/news/${slugOrId}`;
+            const newsImages = parseImages(item.cover_image);
+            
+            for (const locale of routing.locales) {
+                entries.push({
+                    url: getLocalizedUrl(path, locale),
+                    lastModified: item.updated_at ? new Date(item.updated_at) : new Date(item.created_at),
+                    changeFrequency: 'daily' as const,
+                    priority: 0.7,
+                    alternates: getAlternates(path),
+                    images: newsImages,
+                });
+            }
+        }
+    }
 
-    return [...staticEntries, ...productEntries, ...newsEntries];
+    return entries;
 }

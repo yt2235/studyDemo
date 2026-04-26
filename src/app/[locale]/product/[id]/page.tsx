@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props) {
     const images = parseImageUrl(typedProduct.image_url);
     const mainImage = images.length > 0 ? images[0] : '/logo.png';
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yichihealth.com';
 
     return {
         title: typedProduct.name,
@@ -107,8 +107,67 @@ export default async function ProductDetailPage({ params }: Props) {
         }
     }
 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yichihealth.com';
+    const productJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: typedProduct.name,
+        image: productImages,
+        description: typedProduct.description,
+        sku: `PROD-${typedProduct.id}`,
+        category: displayCategory,
+        brand: {
+            '@type': 'Brand',
+            name: 'yichihealth'
+        },
+        offers: {
+            '@type': 'Offer',
+            url: `${baseUrl}/${locale}/product/${id}`,
+            priceCurrency: 'USD',
+            price: typedProduct.price || '0',
+            availability: 'https://schema.org/InStock',
+            seller: {
+                '@type': 'Organization',
+                name: 'yichihealth'
+            }
+        }
+    };
+
+    const breadcrumbJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: `${baseUrl}/${locale}`
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: displayCategory,
+                item: `${baseUrl}/${locale}#products`
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: typedProduct.name,
+                item: `${baseUrl}/${locale}/product/${id}`
+            }
+        ]
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-slate-950 transition-colors duration-500">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+            />
             {/* Navigation Bar */}
             <MainNavbar locale={locale} />
 

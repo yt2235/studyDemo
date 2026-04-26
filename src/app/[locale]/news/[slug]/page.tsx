@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
     if (!news) return {};
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yichihealth.com';
 
     return {
         title: `${news.title} - yichihealth`,
@@ -128,8 +128,35 @@ export default async function NewsDetailPage({ params }: Props) {
 
     const newsImages = parseImages(news.cover_image);
 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yichihealth.com';
+    const newsJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'NewsArticle',
+        headline: news.title,
+        image: newsImages,
+        datePublished: news.published_at || news.created_at,
+        dateModified: news.updated_at || news.published_at || news.created_at,
+        author: {
+            '@type': 'Organization',
+            name: 'yichihealth'
+        },
+        publisher: {
+            '@type': 'Organization',
+            name: 'yichihealth',
+            logo: {
+                '@type': 'ImageObject',
+                url: `${baseUrl}/logo.png`
+            }
+        },
+        description: news.summary
+    };
+
     return (
         <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(newsJsonLd) }}
+            />
             <MainNavbar locale={locale} />
 
             <main className="flex-grow">
