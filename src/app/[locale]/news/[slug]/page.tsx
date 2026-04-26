@@ -25,9 +25,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
     if (!news) return {};
 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+
     return {
         title: `${news.title} - yichihealth`,
         description: news.summary,
+        keywords: `${news.title}, medical news, healthcare industry, yichihealth`,
+        alternates: {
+            canonical: `${baseUrl}/${locale}/news/${slug}`,
+        },
     };
 }
 

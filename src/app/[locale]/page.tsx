@@ -21,6 +21,21 @@ interface ProductRaw {
 }
 
 
+export async function generateMetadata({ params }: Props) {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'HomePage' });
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+
+    return {
+        title: `${t('title')} | yichihealth`,
+        description: t('description'),
+        keywords: 'medical supplies, medical equipment, hospital furniture, surgical instruments, laboratory equipment, dental equipment, yichihealth',
+        alternates: {
+            canonical: `${baseUrl}/${locale}`,
+        },
+    };
+}
+
 export default async function HomePage({ params }: Props) {
     const { locale } = await params;
     setRequestLocale(locale);

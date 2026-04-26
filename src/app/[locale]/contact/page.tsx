@@ -19,10 +19,14 @@ type Props = {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'Metadata' });
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
 
     return {
         title: t('contactTitle'),
         description: t('description'),
+        alternates: {
+            canonical: `${baseUrl}/${locale}/contact`,
+        },
     };
 }
 

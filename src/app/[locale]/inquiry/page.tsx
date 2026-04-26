@@ -11,10 +11,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'Metadata' });
     const tP = await getTranslations({ locale, namespace: 'InquiryPage' });
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
 
     return {
         title: `${tP('title')} | yichihealth`,
         description: tP('subtitle'),
+        keywords: 'bulk medical supplies inquiry, request quote medical equipment, yichihealth sales',
+        alternates: {
+            canonical: `${baseUrl}/${locale}/inquiry`,
+        },
     };
 }
 

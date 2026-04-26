@@ -14,9 +14,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'Metadata' });
 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
     return {
         title: t('aboutTitle'),
-        description: t('description'), // Or a more specific about description if added
+        description: t('description'),
+        keywords: 'about yichihealth, medical supplies company, china medical equipment supplier, healthcare solutions',
+        alternates: {
+            canonical: `${baseUrl}/${locale}/about`,
+        },
     };
 }
 

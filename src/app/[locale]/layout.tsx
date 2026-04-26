@@ -29,20 +29,19 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'Metadata' });
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://example.com';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
 
     return {
+        metadataBase: new URL(baseUrl),
         title: {
             default: t('title'),
             template: `%s | ${t('title')}`,
         },
         description: t('description'),
         keywords: t('keywords'),
-        metadataBase: new URL(baseUrl),
         alternates: {
-            canonical: '/',
             languages: Object.fromEntries(
-                routing.locales.map((loc) => [loc, `/${loc}`])
+                routing.locales.map((loc) => [loc, `${baseUrl}/${loc}`])
             ),
         },
         openGraph: {
