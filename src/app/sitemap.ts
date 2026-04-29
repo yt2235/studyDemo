@@ -23,13 +23,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
 
     // Helper to parse images
-    const parseImages = (imageField: any): string[] => {
+    const parseImages = (imageField: unknown): string[] => {
         if (!imageField) return [];
-        if (Array.isArray(imageField)) return imageField;
+        if (Array.isArray(imageField)) return imageField.filter((image): image is string => typeof image === 'string');
+        if (typeof imageField !== 'string') return [];
         try {
             const parsed = JSON.parse(imageField);
-            if (Array.isArray(parsed)) return parsed;
-        } catch (e) {
+            if (Array.isArray(parsed)) return parsed.filter((image): image is string => typeof image === 'string');
+        } catch {
             // ignore
         }
         return [imageField];
@@ -39,7 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const cleanPathSegment = (segment: string) => encodeURIComponent(segment.replace(/\s+/g, '-'));
 
     // Combined Entries
-    let entries: MetadataRoute.Sitemap = [];
+    const entries: MetadataRoute.Sitemap = [];
 
     // Static Routes
     for (const locale of routing.locales) {
@@ -55,14 +56,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Product routes
-    const { data: products } = await supabase.from('products').select('id, image_url, updated_at');
+    const { data: products, error: productsError } = await supabase.from('products').select('id, image_url');
+    if (productsError) {
+        console.error('Failed to fetch products for sitemap:', productsError);
+    }
     if (products) {
         for (const product of products) {
             const productImages = parseImages(product.image_url);
             for (const locale of routing.locales) {
                 entries.push({
                     url: getLocalizedUrl(`/product/${product.id}`, locale),
-                    lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
+                    lastModified: new Date(),
                     changeFrequency: 'daily' as const,
                     priority: 0.6,
                     alternates: getAlternates(`/product/${product.id}`),
