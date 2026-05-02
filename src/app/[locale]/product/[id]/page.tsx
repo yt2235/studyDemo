@@ -43,10 +43,23 @@ export async function generateMetadata({ params }: Props) {
     const images = parseImageUrl(typedProduct.image_url);
     const mainImage = images.length > 0 ? images[0] : '/logo.png';
 
+    // Fetch actual category name if category_id exists
+    let displayCategory = typedProduct.category || '';
+    if (typedProduct.category_id) {
+        const { data: categoryData } = await supabase
+            .from('categories')
+            .select('name')
+            .eq('id', typedProduct.category_id)
+            .single();
+        if (categoryData && categoryData.name) {
+            displayCategory = categoryData.name;
+        }
+    }
+
     return {
-        title: typedProduct.name,
-        description: `${typedProduct.name} - ${typedProduct.specification}. ${typedProduct.description?.substring(0, 100)}...`,
-        keywords: `${typedProduct.name}, ${typedProduct.category}, medical supplies, yichihealth`,
+        title: `${typedProduct.name} - ${displayCategory}`,
+        description: `${typedProduct.name} (${displayCategory}) - ${typedProduct.specification}. ${typedProduct.description?.substring(0, 100)}...`,
+        keywords: `${typedProduct.name}, ${displayCategory}, medical supplies, health equipment, yichihealth`,
         alternates: {
             canonical: `/${locale}/product/${id}`,
             languages: {
