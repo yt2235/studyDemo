@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'Metadata' });
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yichihealth.com';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
 
     return {
         metadataBase: new URL(baseUrl),
@@ -40,14 +40,17 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         description: t('description'),
         keywords: t('keywords'),
         alternates: {
-            languages: Object.fromEntries(
-                routing.locales.map((loc) => [loc, `${baseUrl}/${loc}`])
-            ),
+            canonical: `/${locale}`,
+            languages: {
+                en: '/en',
+                zh: '/zh',
+                'x-default': '/en',
+            },
         },
         openGraph: {
             title: t('title'),
             description: t('description'),
-            url: '/',
+            url: `/${locale}`,
             siteName: 'yichihealth',
             images: [
                 {

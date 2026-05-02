@@ -43,14 +43,17 @@ export async function generateMetadata({ params }: Props) {
     const images = parseImageUrl(typedProduct.image_url);
     const mainImage = images.length > 0 ? images[0] : '/logo.png';
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yichihealth.com';
-
     return {
         title: typedProduct.name,
         description: `${typedProduct.name} - ${typedProduct.specification}. ${typedProduct.description?.substring(0, 100)}...`,
         keywords: `${typedProduct.name}, ${typedProduct.category}, medical supplies, yichihealth`,
         alternates: {
-            canonical: `${baseUrl}/${locale}/product/${id}`,
+            canonical: `/${locale}/product/${id}`,
+            languages: {
+                en: `/en/product/${id}`,
+                zh: `/zh/product/${id}`,
+                'x-default': `/en/product/${id}`,
+            },
         },
         openGraph: {
             title: typedProduct.name,

@@ -14,13 +14,17 @@ export const revalidate = 60;
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'NewsPage' });
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
 
     return {
         title: `${t('title')} - yichihealth`,
         description: t('subtitle'),
         alternates: {
-            canonical: `${baseUrl}/${locale}/news`,
+            canonical: `/${locale}/news`,
+            languages: {
+                en: '/en/news',
+                zh: '/zh/news',
+                'x-default': '/en/news',
+            },
         },
     };
 }
