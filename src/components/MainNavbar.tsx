@@ -33,7 +33,7 @@ export default function MainNavbar({ locale }: MainNavbarProps) {
     }, []);
 
     const navLinks = [
-        { label: t('nav.products'), href: isHome ? "#products" : `/${locale}#products`, active: false },
+        { label: t('nav.products'), href: `/${locale}/products`, active: pathname.includes('/products') },
         { label: t('nav.about'), href: `/${locale}/about`, active: pathname.includes('/about') },
         { label: t('nav.news'), href: `/${locale}/news`, active: pathname.includes('/news') },
         { label: t('nav.contact'), href: `/${locale}/contact`, active: pathname.includes('/contact') },

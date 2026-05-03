@@ -61,11 +61,11 @@ export async function generateMetadata({ params }: Props) {
         description: `${typedProduct.name} (${displayCategory}) - ${typedProduct.specification}. ${typedProduct.description?.substring(0, 100)}...`,
         keywords: `${typedProduct.name}, ${displayCategory}, medical supplies, health equipment, yichihealth`,
         alternates: {
-            canonical: `/${locale}/product/${id}`,
+            canonical: `/${locale}/products/${id}`,
             languages: {
-                en: `/en/product/${id}`,
-                zh: `/zh/product/${id}`,
-                'x-default': `/en/product/${id}`,
+                en: `/en/products/${id}`,
+                zh: `/zh/products/${id}`,
+                'x-default': `/en/products/${id}`,
             },
         },
         openGraph: {
@@ -138,7 +138,7 @@ export default async function ProductDetailPage({ params }: Props) {
         },
         offers: {
             '@type': 'Offer',
-            url: `${baseUrl}/${locale}/product/${id}`,
+            url: `${baseUrl}/${locale}/products/${id}`,
             priceCurrency: 'USD',
             price: typedProduct.price || '0',
             availability: 'https://schema.org/InStock',
@@ -163,13 +163,13 @@ export default async function ProductDetailPage({ params }: Props) {
                 '@type': 'ListItem',
                 position: 2,
                 name: displayCategory,
-                item: `${baseUrl}/${locale}#products`
+                item: `${baseUrl}/${locale}/products`
             },
             {
                 '@type': 'ListItem',
                 position: 3,
                 name: typedProduct.name,
-                item: `${baseUrl}/${locale}/product/${id}`
+                item: `${baseUrl}/${locale}/products/${id}`
             }
         ]
     };
@@ -191,7 +191,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <main className="max-w-7xl mx-auto px-6 py-8 md:py-16">
                 {/* Back Button */}
                 <a
-                    href={`/${locale}#products`}
+                    href={`/${locale}/products`}
                     className="inline-flex items-center gap-2 text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-8 group"
                 >
                     <svg
@@ -278,7 +278,7 @@ export default async function ProductDetailPage({ params }: Props) {
                                 {t('contactInquiry')}
                             </a>
                             <a
-                                href={`/${locale}#products`}
+                                href={`/${locale}/products`}
                                 className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 hover:-translate-y-0.5"
                             >
                                 {t('viewMore')}

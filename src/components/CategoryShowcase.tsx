@@ -284,7 +284,7 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
                                 <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 outline-none focus:outline-none">
                                     {displayedProducts.map((product) => (
                                         <a
-                                            href={`/${locale}/product/${product.id}`}
+                                            href={`/${locale}/products/${product.id}`}
                                             key={product.id}
                                             className="group flex flex-col bg-white dark:bg-zinc-900/80 rounded-xl border border-zinc-200/60 dark:border-zinc-800/80 overflow-hidden transition-all duration-500 hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 hover:border-blue-300 dark:hover:border-blue-700/50 cursor-pointer"
                                         >

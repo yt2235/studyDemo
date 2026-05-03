@@ -28,11 +28,11 @@ export async function generateMetadata({ params }: Props) {
         title: t('productsTitle'),
         description: t('description'),
         alternates: {
-            canonical: `/${locale}/product`,
+            canonical: `/${locale}/products`,
             languages: {
-                en: '/en/product',
-                zh: '/zh/product',
-                'x-default': '/en/product',
+                en: '/en/products',
+                zh: '/zh/products',
+                'x-default': '/en/products',
             },
         },
     };

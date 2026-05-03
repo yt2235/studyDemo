@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://www.yichihealth.com';
 
     // Base routes
-    const routes = ['', '/about', '/news', '/product', '/contact', '/inquiry', '/faq'];
+    const routes = ['', '/about', '/news', '/products', '/contact', '/inquiry', '/faq'];
 
     // Helper for localized URLs
     const getLocalizedUrl = (route: string, locale: string) => `${baseUrl}/${locale}${route}`;
@@ -65,11 +65,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             const productImages = parseImages(product.image_url);
             for (const locale of routing.locales) {
                 entries.push({
-                    url: getLocalizedUrl(`/product/${product.id}`, locale),
+                    url: getLocalizedUrl(`/products/${product.id}`, locale),
                     lastModified: new Date(),
                     changeFrequency: 'daily' as const,
                     priority: 0.6,
-                    alternates: getAlternates(`/product/${product.id}`),
+                    alternates: getAlternates(`/products/${product.id}`),
                     images: productImages,
                 });
             }
