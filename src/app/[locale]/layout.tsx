@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'Metadata' });
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+    const baseUrl = 'https://www.yichihealth.com';
 
     return {
         metadataBase: new URL(baseUrl),

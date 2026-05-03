@@ -5,7 +5,7 @@ import { routing } from '@/i18n/routing';
 export const revalidate = 60;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+    const baseUrl = 'https://www.yichihealth.com';
 
     // Base routes
     const routes = ['', '/about', '/news', '/product', '/contact', '/inquiry', '/faq'];

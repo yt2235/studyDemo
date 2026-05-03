@@ -123,7 +123,7 @@ export default async function ProductDetailPage({ params }: Props) {
         }
     }
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yichihealth.com';
+    const baseUrl = 'https://www.yichihealth.com';
     const productJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Product',
