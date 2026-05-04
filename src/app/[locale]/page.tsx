@@ -69,14 +69,16 @@ export default async function HomePage({ params }: Props) {
             <MainNavbar locale={locale} />
 
             <main>
-                {/* Hero Section - Full Image Display, No Cropping */}
-                <section className="w-full bg-white dark:bg-zinc-950">
-                    <div className="relative w-full">
-                        <img 
-                            src="/home-bg.png" 
-                            alt="Yichi Health Banner" 
-                            className="w-full h-auto block animate-fade-in" 
-                        />
+                {/* Hero Section - Contained Width Display */}
+                <section className="w-full bg-white dark:bg-zinc-950 pt-6">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/10">
+                            <img 
+                                src="/home-bg.png" 
+                                alt="Yichi Health Banner" 
+                                className="w-full h-auto block animate-fade-in" 
+                            />
+                        </div>
                         {/* Visually Hidden H1 for SEO */}
                         <h1 className="sr-only">
                             {t('title')} {t('subtitle')}
