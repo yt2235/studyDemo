@@ -64,20 +64,21 @@ export default async function ProductListingPage({ params }: Props) {
             <MainNavbar locale={locale} />
 
             <main className="flex-grow">
-                {/* Header Section */}
-                <div className="bg-zinc-50 dark:bg-zinc-900/50 border-b border-zinc-200 dark:border-zinc-800 py-12 md:py-20">
+                {/* Header Section with shrunk home-bg.png */}
+                <div className="w-full bg-white dark:bg-zinc-950 pt-10">
                     <div className="max-w-7xl mx-auto px-6">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-900 dark:text-zinc-50 tracking-tight mb-4 animate-slide-up">
-                            {t('products.title')}
-                        </h1>
-                        <p className="text-lg md:text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed animate-slide-up-delay">
-                            {t('products.subtitle')}
-                        </p>
+                        <div className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-xl shadow-blue-500/5">
+                            <img
+                                src="/home-bg.png"
+                                alt="Product Center Banner"
+                                className="w-full h-auto block"
+                            />
+                        </div>
                     </div>
                 </div>
 
                 {/* Product Catalog Area */}
-                <div className="max-w-7xl mx-auto px-6 py-16 md:py-24">
+                <div className="max-w-7xl mx-auto px-6 pt-16 pb-24 md:pb-32">
                     <CategoryShowcase
                         categories={categoriesData}
                         products={typedProducts}

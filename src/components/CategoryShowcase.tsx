@@ -118,16 +118,31 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
 
     return (
         <section id="products" className="pb-24 md:pb-32 scroll-mt-20 focus:outline-none">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 gap-3">
-                <div className="max-w-2xl">
-                    <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 dark:text-zinc-50 mb-2 tracking-tight">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                <div className="max-w-3xl">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="h-1 w-12 bg-blue-600 dark:bg-blue-500 rounded-full" />
+                        <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">
+                            {locale === 'zh' ? '产品目录' : 'Product Catalog'}
+                        </span>
+                    </div>
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-zinc-900 dark:text-zinc-50 mb-4 tracking-tight leading-tight">
                         {dict.title}
                     </h2>
-                    <p className="text-zinc-600 dark:text-zinc-400 text-base">{dict.subtitle}</p>
+                    <p className="text-zinc-600 dark:text-zinc-400 text-lg md:text-xl leading-relaxed max-w-2xl font-medium">
+                        {dict.subtitle}
+                    </p>
                 </div>
-                <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400 bg-white dark:bg-zinc-900 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
-                    {displayedProducts.length} {dict.items}
+                <div className="shrink-0 flex items-center">
+                    <div className="px-5 py-2.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center gap-3">
+                        <div className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        </div>
+                        <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                            {displayedProducts.length} <span className="text-zinc-500 dark:text-zinc-400 font-medium">{dict.items}</span>
+                        </span>
+                    </div>
                 </div>
             </div>
 
