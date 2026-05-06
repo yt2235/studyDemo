@@ -97,7 +97,7 @@ export default async function NewsDetailPage({ params }: Props) {
                 <div className="relative">
                     {images.map((img, idx) => (
                          <div key={idx} className={`md:mb-8 mb-10 w-full md:w-80 lg:w-96 rounded-2xl overflow-hidden shadow-xl border border-zinc-100 dark:border-zinc-800 ring-4 ring-white dark:ring-zinc-900 ${idx % 2 === 0 ? 'md:float-right md:ml-8' : 'md:float-left md:mr-8'}`}>
-                             <img src={img} alt="" className="w-full h-auto" />
+                             <img src={img} alt={`${news.title} - ${idx + 1}`} className="w-full h-auto" />
                          </div>
                     ))}
                     <div dangerouslySetInnerHTML={{ __html: content }} />
@@ -118,7 +118,7 @@ export default async function NewsDetailPage({ params }: Props) {
                         <div key={i}>
                             {showImage && (
                                 <div className={`md:mb-6 mb-8 w-full md:w-80 lg:w-96 rounded-2xl overflow-hidden shadow-xl border border-zinc-100 dark:border-zinc-800 ring-4 ring-white dark:ring-zinc-900 ${imgIndex % 2 === 0 ? 'md:float-right md:ml-8' : 'md:float-left md:mr-8'}`}>
-                                    <img src={images[imgIndex]} alt="" className="w-full h-auto" />
+                                    <img src={images[imgIndex]} alt={`${news.title} - Image ${imgIndex + 1}`} className="w-full h-auto" />
                                 </div>
                             )}
                             <p>{para}</p>

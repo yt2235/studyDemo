@@ -56,20 +56,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Product routes
-    const { data: products, error: productsError } = await supabase.from('products').select('id, image_url');
+    const { data: products, error: productsError } = await supabase.from('products').select('id, name, image_url');
     if (productsError) {
         console.error('Failed to fetch products for sitemap:', productsError);
     }
     if (products) {
+        const { slugify } = await import('@/lib/slug');
         for (const product of products) {
+            const productSlug = `${product.id}-${slugify(product.name || '')}`;
             const productImages = parseImages(product.image_url);
             for (const locale of routing.locales) {
                 entries.push({
-                    url: getLocalizedUrl(`/products/${product.id}`, locale),
+                    url: getLocalizedUrl(`/products/${productSlug}`, locale),
                     lastModified: new Date(),
                     changeFrequency: 'daily' as const,
                     priority: 0.6,
-                    alternates: getAlternates(`/products/${product.id}`),
+                    alternates: getAlternates(`/products/${productSlug}`),
                     images: productImages,
                 });
             }

@@ -94,19 +94,34 @@ export default async function LocaleLayout({ children, params }: Props) {
     const t = await getTranslations({ locale, namespace: 'Metadata' });
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
 
-    const jsonLd = {
+    const organizationJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Organization',
         name: 'yichihealth',
         url: baseUrl,
         logo: `${baseUrl}/logo.png`,
         description: t('description'),
+        sameAs: [
+            'https://www.yichihealth.com',
+        ],
         contactPoint: {
             '@type': 'ContactPoint',
             telephone: '+86-19136215806',
             contactType: 'customer service',
             areaServed: 'Worldwide',
             availableLanguage: ['Chinese', 'English']
+        }
+    };
+
+    const websiteJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'yichihealth',
+        url: baseUrl,
+        potentialAction: {
+            '@type': 'SearchAction',
+            target: `${baseUrl}/${locale}/products?q={search_term_string}`,
+            'query-input': 'required name=search_term_string'
         }
     };
 
@@ -117,7 +132,11 @@ export default async function LocaleLayout({ children, params }: Props) {
             <head>
                 <script
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
                 />
             </head>
             <body

@@ -7,6 +7,8 @@ import MainFooter from '@/components/MainFooter';
 import { parseImageUrl } from '@/lib/image';
 import { AppstoreOutlined, FileTextOutlined } from '@ant-design/icons';
 
+import { parseIdFromSlug, slugify } from '@/lib/slug';
+
 export const revalidate = 60;
 
 type Props = {
@@ -29,10 +31,11 @@ export async function generateMetadata({ params }: Props) {
     const { locale, id } = await params;
     const t = await getTranslations({ locale, namespace: 'ProductDetail' });
 
+    const actualId = parseIdFromSlug(id);
     const { data: product } = await supabase
         .from('products')
         .select('*')
-        .eq('id', id)
+        .eq('id', actualId)
         .single();
 
     if (!product) {
@@ -56,16 +59,18 @@ export async function generateMetadata({ params }: Props) {
         }
     }
 
+    const productSlug = `${typedProduct.id}-${slugify(typedProduct.name)}`;
+
     return {
         title: `${typedProduct.name} - ${displayCategory}`,
-        description: `${typedProduct.name} (${displayCategory}) - ${typedProduct.specification}. ${typedProduct.description?.substring(0, 100)}...`,
+        description: `${typedProduct.name} (${displayCategory}) - ${typedProduct.specification}. ${typedProduct.description?.substring(0, 150)}...`,
         keywords: `${typedProduct.name}, ${displayCategory}, medical supplies, health equipment, yichihealth`,
         alternates: {
-            canonical: `/${locale}/products/${id}`,
+            canonical: `/${locale}/products/${productSlug}`,
             languages: {
-                en: `/en/products/${id}`,
-                zh: `/zh/products/${id}`,
-                'x-default': `/en/products/${id}`,
+                en: `/en/products/${productSlug}`,
+                zh: `/zh/products/${productSlug}`,
+                'x-default': `/en/products/${productSlug}`,
             },
         },
         openGraph: {
@@ -97,10 +102,11 @@ export default async function ProductDetailPage({ params }: Props) {
     const t = await getTranslations('ProductDetail');
     const tHome = await getTranslations('HomePage');
 
+    const actualId = parseIdFromSlug(id);
     const { data: product, error } = await supabase
         .from('products')
         .select('*')
-        .eq('id', id)
+        .eq('id', actualId)
         .single();
 
     if (error || !product) {
@@ -124,6 +130,9 @@ export default async function ProductDetailPage({ params }: Props) {
     }
 
     const baseUrl = 'https://www.yichihealth.com';
+    const productSlug = `${typedProduct.id}-${slugify(typedProduct.name)}`;
+    const productUrl = `${baseUrl}/${locale}/products/${productSlug}`;
+
     const productJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Product',
@@ -138,7 +147,7 @@ export default async function ProductDetailPage({ params }: Props) {
         },
         offers: {
             '@type': 'Offer',
-            url: `${baseUrl}/${locale}/products/${id}`,
+            url: productUrl,
             priceCurrency: 'USD',
             price: typedProduct.price || '0',
             availability: 'https://schema.org/InStock',
@@ -169,7 +178,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 '@type': 'ListItem',
                 position: 3,
                 name: typedProduct.name,
-                item: `${baseUrl}/${locale}/products/${id}`
+                item: productUrl
             }
         ]
     };
@@ -205,6 +214,18 @@ export default async function ProductDetailPage({ params }: Props) {
                     </svg>
                     {t('backToProducts')}
                 </a>
+                {/* Product Header: Name & Category Badge (Spans full width) */}
+                <div className="flex flex-col gap-4 mb-10 md:mb-16">
+                    <div className="flex flex-wrap items-baseline gap-4 md:gap-6">
+                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight leading-tight">
+                            {typedProduct.name}
+                        </h1>
+                        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800/50 text-sm font-semibold text-blue-700 dark:text-blue-300 whitespace-nowrap">
+                            <span className="w-2 h-2 rounded-full bg-blue-500" />
+                            {displayCategory}
+                        </span>
+                    </div>
+                </div>
 
                 {/* Product Detail Layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
@@ -217,36 +238,26 @@ export default async function ProductDetailPage({ params }: Props) {
                     </div>
 
                     {/* Right: Product Info */}
-                    <div className="animate-slide-in-right lg:col-span-7 flex flex-col justify-center">
-                        {/* Product Name */}
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-zinc-50 tracking-tight leading-tight mb-6">
-                            {typedProduct.name}
-                        </h1>
-
-                        {/* Category Badge */}
-                        <div className="mb-8">
-                            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-800/50 text-sm font-medium text-blue-700 dark:text-blue-300">
-                                <span className="w-2 h-2 rounded-full bg-blue-500" />
-                                {displayCategory}
-                            </span>
-                        </div>
+                    <div className="animate-slide-in-right lg:col-span-7 flex flex-col">
 
                         {/* Info Cards */}
                         <div className="space-y-4 mb-10">
                             {/* Specification / Size */}
-                            <div className="flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow duration-300">
-                                <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0 border border-indigo-100 dark:border-indigo-800/50 transition-transform group-hover:scale-110">
-                                    <AppstoreOutlined className="text-2xl text-indigo-600 dark:text-indigo-400" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
-                                        {t('specification')}
+                            {typedProduct.specification && (
+                                <div className="flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow duration-300">
+                                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0 border border-indigo-100 dark:border-indigo-800/50 transition-transform group-hover:scale-110">
+                                        <AppstoreOutlined className="text-2xl text-indigo-600 dark:text-indigo-400" />
                                     </div>
-                                    <div className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-                                        {typedProduct.specification}
+                                    <div className="flex-1 min-w-0">
+                                        <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
+                                            {t('specification')}
+                                        </div>
+                                        <div className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+                                            {typedProduct.specification}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
 
 
                             {/* Description */}

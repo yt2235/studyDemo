@@ -75,13 +75,13 @@ export default async function HomePage({ params }: Props) {
                         <div className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/10">
                             <img 
                                 src="/home-bg.png" 
-                                alt="Yichi Health Banner" 
+                                alt={`${t('title')} - Professional Medical Solutions & Equipment`} 
                                 className="w-full h-auto block animate-fade-in" 
                             />
                         </div>
                         {/* Visually Hidden H1 for SEO */}
                         <h1 className="sr-only">
-                            {t('title')} {t('subtitle')}
+                            {t('title')} - {t('subtitle')} | Leading Global Medical Supplier
                         </h1>
                     </div>
                 </section>
