@@ -1,6 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { supabase } from '@/supabase';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { ProductImageGallery } from '@/components/ProductImageGallery';
 import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
@@ -100,7 +100,6 @@ export default async function ProductDetailPage({ params }: Props) {
     setRequestLocale(locale);
 
     const t = await getTranslations('ProductDetail');
-    const tHome = await getTranslations('HomePage');
 
     const actualId = parseIdFromSlug(id);
     const { data: product, error } = await supabase
@@ -115,6 +114,11 @@ export default async function ProductDetailPage({ params }: Props) {
 
     const typedProduct = product as Product;
     const productImages = parseImageUrl(typedProduct.image_url);
+    const productSlug = `${typedProduct.id}-${slugify(typedProduct.name)}`;
+
+    if (decodeURIComponent(id) !== productSlug) {
+        permanentRedirect(`/${locale}/products/${productSlug}`);
+    }
 
     // Fetch actual category name if category_id exists
     let displayCategory = typedProduct.category || '';
@@ -130,7 +134,6 @@ export default async function ProductDetailPage({ params }: Props) {
     }
 
     const baseUrl = 'https://www.yichihealth.com';
-    const productSlug = `${typedProduct.id}-${slugify(typedProduct.name)}`;
     const productUrl = `${baseUrl}/${locale}/products/${productSlug}`;
 
     const productJsonLd = {
