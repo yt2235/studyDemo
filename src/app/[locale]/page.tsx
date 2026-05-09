@@ -5,6 +5,7 @@ import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
 import { parseImageUrl } from '@/lib/image';
 import HomeHeroBanner from '@/components/HomeHeroBanner';
+import { BRAND_NAME, LEGAL_NAME, SITE_KEYWORDS, SITE_NAME, SITE_URL } from '@/lib/site';
 
 export const revalidate = 60;
 
@@ -24,12 +25,19 @@ interface ProductRaw {
 
 export async function generateMetadata({ params }: Props) {
     const { locale } = await params;
-    const t = await getTranslations({ locale, namespace: 'HomePage' });
 
     return {
-        title: `${t('title')} | yichihealth`,
-        description: t('description'),
-        keywords: 'medical supplies, medical equipment, hospital furniture, surgical instruments, laboratory equipment, dental equipment, yichihealth',
+        title: `${BRAND_NAME} (${SITE_NAME}) | Medical Supplies & Equipment Supplier`,
+        description: `${BRAND_NAME}, also known as ${SITE_NAME}, is the official website of ${LEGAL_NAME}, supplying medical equipment, medical consumables, diagnostic testing products and laboratory supplies worldwide.`,
+        keywords: [
+            ...SITE_KEYWORDS,
+            'yichihealth official website',
+            'Yichi Health official website',
+            'China medical supplies exporter',
+            'hospital furniture',
+            'surgical instruments',
+            'dental equipment',
+        ],
         alternates: {
             canonical: `/${locale}`,
             languages: {
@@ -37,6 +45,27 @@ export async function generateMetadata({ params }: Props) {
                 zh: '/zh',
                 'x-default': '/en',
             },
+        },
+        openGraph: {
+            title: `${BRAND_NAME} (${SITE_NAME}) | Global Medical Supplies`,
+            description: `${SITE_NAME} is the official online platform for ${BRAND_NAME}, a global supplier of medical equipment, consumables and laboratory supplies.`,
+            url: `/${locale}`,
+            siteName: `${BRAND_NAME} (${SITE_NAME})`,
+            images: [
+                {
+                    url: '/home.png',
+                    width: 2730,
+                    height: 1536,
+                    alt: `${BRAND_NAME} medical equipment and supplies`,
+                },
+            ],
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${BRAND_NAME} (${SITE_NAME})`,
+            description: `${SITE_NAME} official website for medical equipment, consumables, diagnostic testing products and laboratory supplies.`,
+            images: ['/home.png'],
         },
     };
 }
@@ -46,6 +75,32 @@ export default async function HomePage({ params }: Props) {
     setRequestLocale(locale);
 
     const t = await getTranslations('HomePage');
+    const homePageJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        '@id': `${SITE_URL}/${locale}#webpage`,
+        url: `${SITE_URL}/${locale}`,
+        name: `${BRAND_NAME} (${SITE_NAME}) Official Website`,
+        alternateName: [
+            SITE_NAME,
+            'Yichihealth',
+            'Yiwu Yichi Health',
+            'Yiwu Yichi Trading Company',
+        ],
+        description: `${BRAND_NAME}, also known as ${SITE_NAME}, supplies medical equipment, medical consumables, diagnostic testing products and laboratory supplies worldwide.`,
+        isPartOf: {
+            '@id': `${SITE_URL}/#website`,
+        },
+        about: {
+            '@id': `${SITE_URL}/#organization`,
+        },
+        primaryImageOfPage: {
+            '@type': 'ImageObject',
+            url: `${SITE_URL}/home.png`,
+            width: 2730,
+            height: 1536,
+        },
+    };
 
     // Fetching categories and products concurrently
     const [categoriesRes, productsRes] = await Promise.all([
@@ -70,6 +125,11 @@ export default async function HomePage({ params }: Props) {
             <MainNavbar locale={locale} />
 
             <main>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageJsonLd) }}
+                />
+
                 {/* Hero Section - Contained Width Display */}
                 <section className="w-full bg-white dark:bg-zinc-950 pt-6">
                     <div className="max-w-7xl mx-auto px-6">

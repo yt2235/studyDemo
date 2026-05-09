@@ -1,17 +1,16 @@
 import { MetadataRoute } from 'next';
 import { supabase } from '@/supabase';
 import { routing } from '@/i18n/routing';
+import { SITE_URL } from '@/lib/site';
 
 export const revalidate = 60;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://www.yichihealth.com';
-
     // Base routes
     const routes = ['', '/about', '/news', '/products', '/contact', '/inquiry', '/faq'];
 
     // Helper for localized URLs
-    const getLocalizedUrl = (route: string, locale: string) => `${baseUrl}/${locale}${route}`;
+    const getLocalizedUrl = (route: string, locale: string) => `${SITE_URL}/${locale}${route}`;
 
     // Helper to generate alternates object
     const getAlternates = (route: string) => {

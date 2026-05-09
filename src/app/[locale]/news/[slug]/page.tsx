@@ -75,13 +75,14 @@ export default async function NewsDetailPage({ params }: Props) {
         .limit(2);
 
     // Helper to parse images (could be string or JSON array string)
-    const parseImages = (imageField: any): string[] => {
+    const parseImages = (imageField: unknown): string[] => {
         if (!imageField) return [];
-        if (Array.isArray(imageField)) return imageField;
+        if (Array.isArray(imageField)) return imageField.filter((image): image is string => typeof image === 'string');
+        if (typeof imageField !== 'string') return [];
         try {
             const parsed = JSON.parse(imageField);
-            if (Array.isArray(parsed)) return parsed;
-        } catch (e) {
+            if (Array.isArray(parsed)) return parsed.filter((image): image is string => typeof image === 'string');
+        } catch {
             // ignore
         }
         return [imageField];
@@ -131,7 +132,7 @@ export default async function NewsDetailPage({ params }: Props) {
 
     const newsImages = parseImages(news.cover_image);
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://yichihealth.com';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
     const newsJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'NewsArticle',

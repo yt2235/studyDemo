@@ -5,6 +5,15 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { routing } from '@/i18n/routing';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import '../globals.css';
+import {
+    BRAND_NAME,
+    LEGAL_NAME,
+    SITE_EMAIL,
+    SITE_KEYWORDS,
+    SITE_NAME,
+    SITE_PHONE,
+    SITE_URL,
+} from '@/lib/site';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -29,16 +38,19 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'Metadata' });
 
-    const baseUrl = 'https://www.yichihealth.com';
-
     return {
-        metadataBase: new URL(baseUrl),
+        metadataBase: new URL(SITE_URL),
+        applicationName: `${BRAND_NAME} (${SITE_NAME})`,
         title: {
             default: t('title'),
-            template: `%s | ${t('title')}`,
+            template: `%s | ${BRAND_NAME} (${SITE_NAME})`,
         },
         description: t('description'),
-        keywords: t('keywords'),
+        keywords: [...SITE_KEYWORDS, t('keywords')],
+        authors: [{ name: BRAND_NAME, url: SITE_URL }],
+        creator: BRAND_NAME,
+        publisher: LEGAL_NAME,
+        category: 'Medical supplies and equipment',
         alternates: {
             canonical: `/${locale}`,
             languages: {
@@ -51,13 +63,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
             title: t('title'),
             description: t('description'),
             url: `/${locale}`,
-            siteName: 'yichihealth',
+            siteName: `${BRAND_NAME} (${SITE_NAME})`,
             images: [
                 {
-                    url: '/logo.png',
-                    width: 800,
-                    height: 600,
-                    alt: 'yichihealth logo',
+                    url: '/home.png',
+                    width: 2730,
+                    height: 1536,
+                    alt: `${BRAND_NAME} medical supplies and equipment`,
                 },
             ],
             locale: locale,
@@ -68,7 +80,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
             card: 'summary_large_image',
             title: t('title'),
             description: t('description'),
-            images: ['/logo.png'],
+            images: ['/home.png'],
         },
         robots: {
             index: true,
@@ -92,21 +104,27 @@ export default async function LocaleLayout({ children, params }: Props) {
     }
 
     const t = await getTranslations({ locale, namespace: 'Metadata' });
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || SITE_URL;
 
     const organizationJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Organization',
-        name: 'yichihealth',
+        '@id': `${baseUrl}/#organization`,
+        name: BRAND_NAME,
+        legalName: LEGAL_NAME,
+        alternateName: [SITE_NAME, 'Yiwu Yichi Health', 'Yichihealth'],
         url: baseUrl,
         logo: `${baseUrl}/logo.png`,
+        image: `${baseUrl}/home.png`,
         description: t('description'),
+        email: SITE_EMAIL,
+        telephone: SITE_PHONE,
         sameAs: [
-            'https://www.yichihealth.com',
+            SITE_URL,
         ],
         contactPoint: {
             '@type': 'ContactPoint',
-            telephone: '+86-19136215806',
+            telephone: SITE_PHONE,
             contactType: 'customer service',
             areaServed: 'Worldwide',
             availableLanguage: ['Chinese', 'English']
@@ -116,8 +134,13 @@ export default async function LocaleLayout({ children, params }: Props) {
     const websiteJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        name: 'yichihealth',
+        '@id': `${baseUrl}/#website`,
+        name: BRAND_NAME,
+        alternateName: [SITE_NAME, 'Yichihealth'],
         url: baseUrl,
+        publisher: {
+            '@id': `${baseUrl}/#organization`,
+        },
         potentialAction: {
             '@type': 'SearchAction',
             target: `${baseUrl}/${locale}/products?q={search_term_string}`,

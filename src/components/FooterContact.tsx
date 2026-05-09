@@ -29,7 +29,7 @@ export default function FooterContact() {
             </p>
             <p>
                 <GlobalOutlined className="mr-2 text-blue-500" />
-                <a href="http://www.yichihealth.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">
+                <a href="https://www.yichihealth.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-500 transition-colors">
                     www.yichihealth.com
                 </a>
             </p>

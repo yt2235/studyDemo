@@ -114,7 +114,7 @@ export default async function ContactPage({ params }: Props) {
                                     { id: 'whatsapp', icon: <WhatsAppOutlined />, href: 'https://wa.me/8619136215806' },
                                     { id: 'wechat', icon: <WechatOutlined /> },
                                     { id: 'email', icon: <MailOutlined />, href: 'mailto:info@yichihealth.com' },
-                                    { id: 'website', icon: <GlobalOutlined />, href: 'http://www.yichihealth.com' },
+                                    { id: 'website', icon: <GlobalOutlined />, href: 'https://www.yichihealth.com' },
                                 ].map((item, idx) => (
                                     <div
                                         key={item.id}
