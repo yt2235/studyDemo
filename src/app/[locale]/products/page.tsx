@@ -4,6 +4,7 @@ import { CategoryShowcase, Category, Product } from '@/components/CategoryShowca
 import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
 import { parseImageUrl } from '@/lib/image';
+import HomeHeroBanner from '@/components/HomeHeroBanner';
 
 export const revalidate = 60;
 
@@ -64,16 +65,10 @@ export default async function ProductListingPage({ params }: Props) {
             <MainNavbar locale={locale} />
 
             <main className="flex-grow">
-                {/* Header Section with shrunk home-bg.png */}
+                {/* Header Section */}
                 <div className="w-full bg-white dark:bg-zinc-950 pt-10">
                     <div className="max-w-7xl mx-auto px-6">
-                        <div className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-xl shadow-blue-500/5">
-                            <img
-                                src="/home-bg.png"
-                                alt="Product Center Banner"
-                                className="w-full h-auto block"
-                            />
-                        </div>
+                        <HomeHeroBanner headingLevel="h2" className="shadow-xl shadow-blue-500/5" />
                     </div>
                 </div>
 

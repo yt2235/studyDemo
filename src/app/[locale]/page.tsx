@@ -4,6 +4,7 @@ import { CategoryShowcase, Category, Product } from '@/components/CategoryShowca
 import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
 import { parseImageUrl } from '@/lib/image';
+import HomeHeroBanner from '@/components/HomeHeroBanner';
 
 export const revalidate = 60;
 
@@ -72,17 +73,7 @@ export default async function HomePage({ params }: Props) {
                 {/* Hero Section - Contained Width Display */}
                 <section className="w-full bg-white dark:bg-zinc-950 pt-6">
                     <div className="max-w-7xl mx-auto px-6">
-                        <div className="relative w-full rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/10">
-                            <img 
-                                src="/home-bg.png" 
-                                alt={`${t('title')} - Professional Medical Solutions & Equipment`} 
-                                className="w-full h-auto block animate-fade-in" 
-                            />
-                        </div>
-                        {/* Visually Hidden H1 for SEO */}
-                        <h1 className="sr-only">
-                            {t('title')} - {t('subtitle')} | Leading Global Medical Supplier
-                        </h1>
+                        <HomeHeroBanner />
                     </div>
                 </section>
 
