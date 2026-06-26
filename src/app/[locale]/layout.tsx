@@ -52,21 +52,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         publisher: LEGAL_NAME,
         category: 'Medical supplies and equipment',
         alternates: {
-            canonical: `/${locale}`,
+            canonical: `${SITE_URL}/${locale}`,
             languages: {
-                en: '/en',
-                zh: '/zh',
-                'x-default': '/en',
+                en: `${SITE_URL}/en`,
+                zh: `${SITE_URL}/zh`,
+                'x-default': `${SITE_URL}/en`,
             },
         },
         openGraph: {
             title: t('title'),
             description: t('description'),
-            url: `/${locale}`,
+            url: `${SITE_URL}/${locale}`,
             siteName: `${BRAND_NAME} (${SITE_NAME})`,
             images: [
                 {
-                    url: '/home.png',
+                    url: `${SITE_URL}/home.png`,
                     width: 2730,
                     height: 1536,
                     alt: `${BRAND_NAME} medical supplies and equipment`,
@@ -80,7 +80,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
             card: 'summary_large_image',
             title: t('title'),
             description: t('description'),
-            images: ['/home.png'],
+            images: [`${SITE_URL}/home.png`],
         },
         robots: {
             index: true,
@@ -93,6 +93,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
                 'max-snippet': -1,
             },
         },
+        manifest: '/manifest.json',
     };
 }
 

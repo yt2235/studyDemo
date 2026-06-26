@@ -11,6 +11,7 @@ import {
     GlobalOutlined,
     EnvironmentOutlined
 } from '@ant-design/icons';
+import { SITE_URL } from '@/lib/site';
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -22,14 +23,34 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
     return {
         title: t('contactTitle'),
-        description: t('description'),
+        description: t('contactDescription'),
         alternates: {
-            canonical: `/${locale}/contact`,
+            canonical: `${SITE_URL}/${locale}/contact`,
             languages: {
-                en: '/en/contact',
-                zh: '/zh/contact',
-                'x-default': '/en/contact',
+                en: `${SITE_URL}/en/contact`,
+                zh: `${SITE_URL}/zh/contact`,
+                'x-default': `${SITE_URL}/en/contact`,
             },
+        },
+        openGraph: {
+            title: t('contactTitle'),
+            description: t('contactDescription'),
+            type: 'website',
+            url: `${SITE_URL}/${locale}/contact`,
+            images: [
+                {
+                    url: `${SITE_URL}/home.png`,
+                    width: 2730,
+                    height: 1536,
+                    alt: 'Contact Yichi Health',
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: t('contactTitle'),
+            description: t('contactDescription'),
+            images: [`${SITE_URL}/home.png`],
         },
     };
 }
@@ -39,8 +60,36 @@ export default async function ContactPage({ params }: Props) {
     setRequestLocale(locale);
     const t = await getTranslations('AboutPage');
 
+    const localBusinessJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        '@id': `${SITE_URL}/#localbusiness`,
+        name: 'Yichi Health (Yiwu Yichi Trading Company)',
+        url: SITE_URL,
+        email: 'info@yichihealth.com',
+        telephone: '+86-19136215806',
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Building 16, Huangyuan New Village, Choucheng Street',
+            addressLocality: 'Yiwu',
+            addressRegion: 'Zhejiang',
+            postalCode: '322000',
+            addressCountry: 'CN',
+        },
+        contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: '+86-19136215806',
+            contactType: 'customer service',
+            availableLanguage: ['Chinese', 'English'],
+        },
+    };
+
     return (
         <div className="flex flex-col min-h-screen bg-white dark:bg-zinc-950 transition-colors duration-500">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+            />
             <MainNavbar locale={locale} />
 
             <main className="flex-grow">

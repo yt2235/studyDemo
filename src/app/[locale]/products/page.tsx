@@ -5,6 +5,7 @@ import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
 import { parseImageUrl } from '@/lib/image';
 import HomeHeroBanner from '@/components/HomeHeroBanner';
+import { SITE_URL } from '@/lib/site';
 
 export const revalidate = 60;
 
@@ -27,14 +28,34 @@ export async function generateMetadata({ params }: Props) {
 
     return {
         title: t('productsTitle'),
-        description: t('description'),
+        description: t('productsDescription'),
         alternates: {
-            canonical: `/${locale}/products`,
+            canonical: `${SITE_URL}/${locale}/products`,
             languages: {
-                en: '/en/products',
-                zh: '/zh/products',
-                'x-default': '/en/products',
+                en: `${SITE_URL}/en/products`,
+                zh: `${SITE_URL}/zh/products`,
+                'x-default': `${SITE_URL}/en/products`,
             },
+        },
+        openGraph: {
+            title: t('productsTitle'),
+            description: t('productsDescription'),
+            type: 'website',
+            url: `${SITE_URL}/${locale}/products`,
+            images: [
+                {
+                    url: `${SITE_URL}/home.png`,
+                    width: 2730,
+                    height: 1536,
+                    alt: 'Yichi Health Products Catalog',
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: t('productsTitle'),
+            description: t('productsDescription'),
+            images: [`${SITE_URL}/home.png`],
         },
     };
 }

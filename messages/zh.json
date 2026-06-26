@@ -4,8 +4,11 @@
     "description": "专业外贸产品展示平台，提供优质医疗耗材、临床诊断设备等分类浏览，连接全球供应商与买家/采购商。",
     "keywords": "yichihealth, 国际贸易, 医疗贸易, 医疗耗材, 诊断设备, 医疗器械, 全球贸易, 一驰健康, 医疗产品出口, 医疗器材, 义乌贸易",
     "aboutTitle": "关于一驰健康 - 全球医疗耗材供应商",
+    "aboutDescription": "了解一驰健康（义乌市一驰贸易有限公司），一家通过 ISO 13485、CE、FDA 认证的全球医疗耗材与诊断设备供应商，专注一次性医疗用品、实验室耗材及 OEM/ODM 定制服务。",
     "contactTitle": "联系一驰健康 - 获取报价及咨询",
-    "productsTitle": "产品中心 - 浏览优质医疗耗材及器材"
+    "contactDescription": "联系一驰健康获取医疗耗材批量采购报价、OEM/ODM 定制或合作咨询。可通过邮件、WhatsApp 或微信联系我们的专业团队，24小时内响应。",
+    "productsTitle": "产品中心 - 浏览优质医疗耗材及器材",
+    "productsDescription": "浏览一驰健康全线医疗耗材、诊断设备及实验室用品。500+ 款产品，CE & FDA 认证，支持 OEM/ODM 定制。"
   },
   "HomePage": {
     "title": "全球优质产品",

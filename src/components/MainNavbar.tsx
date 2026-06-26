@@ -45,11 +45,11 @@ export default function MainNavbar({ locale }: MainNavbarProps) {
         <>
             <div ref={sentinelRef} className="h-px w-full absolute top-0 pointer-events-none" />
             <nav className={`sticky top-0 z-50 transition-all duration-300 backdrop-blur-xl ${isScrolled ? 'bg-white/95 dark:bg-zinc-900/95 py-0 shadow-md border-b-zinc-200 dark:border-b-zinc-800' : 'bg-white/80 dark:bg-zinc-900/80 border-b border-zinc-200/50 dark:border-zinc-800/50 shadow-sm'}`}>
-                <div className={`max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between transition-all duration-300 ${isScrolled ? 'h-12' : 'h-16'}`}>
+                <div className="max-w-7xl mx-auto px-4 md:px-6 flex items-center justify-between h-16">
                 {/* Logo Section */}
                 <div className="flex items-center gap-3 text-zinc-900 leading-none">
                     <a href={`/${locale}`} className="flex items-center gap-2 group">
-                        <div className={`relative transition-all duration-300 group-hover:scale-105 overflow-hidden ${isScrolled ? 'h-7 w-32 md:h-8 md:w-36' : 'h-9 w-40 md:h-11 md:w-48'}`}>
+                        <div className="relative transition-all duration-300 group-hover:scale-105 overflow-hidden h-9 w-40 md:h-11 md:w-48">
                             <Image
                                 src="/logo.png"
                                 alt="yichihealth logo"

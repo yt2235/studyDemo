@@ -29,6 +29,11 @@ async function test() {
     const { data: leads, error: leadsError } = await supabase.from('customer_leads').select('*');
     if (leadsError) console.error('Leads Error:', leadsError);
     else console.log('Leads Data Count:', leads?.length, leads);
+
+    console.log('\nTesting Products...');
+    const { data: products, error: productsError } = await supabase.from('products').select('*').limit(1);
+    if (productsError) console.error('Products Error:', productsError);
+    else console.log('Product Keys:', products?.[0] ? Object.keys(products[0]) : 'None', products?.[0]);
 }
 
 test();

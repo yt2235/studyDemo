@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
 import LeadForm from '@/components/LeadForm';
+import { SITE_URL } from '@/lib/site';
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -16,12 +17,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         description: tP('subtitle'),
         keywords: 'bulk medical supplies inquiry, request quote medical equipment, yichihealth sales',
         alternates: {
-            canonical: `/${locale}/inquiry`,
+            canonical: `${SITE_URL}/${locale}/inquiry`,
             languages: {
-                en: '/en/inquiry',
-                zh: '/zh/inquiry',
-                'x-default': '/en/inquiry',
+                en: `${SITE_URL}/en/inquiry`,
+                zh: `${SITE_URL}/zh/inquiry`,
+                'x-default': `${SITE_URL}/en/inquiry`,
             },
+        },
+        robots: {
+            index: false,
+            follow: false,
         },
     };
 }

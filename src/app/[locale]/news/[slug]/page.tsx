@@ -5,6 +5,7 @@ import { supabase } from '@/supabase';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { CalendarOutlined, EyeOutlined, LeftOutlined, UserOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { SITE_URL } from '@/lib/site';
 
 type Props = {
     params: Promise<{ locale: string; slug: string }>;
@@ -19,23 +20,53 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(slug);
     const { data: news } = await supabase
         .from('news')
-        .select('title, summary')
+        .select('title, summary, cover_image, published_at')
         .or(`slug.eq."${slug}"${isUuid ? `,id.eq.${slug}` : ''}`)
         .single();
 
     if (!news) return {};
+
+    // Parse cover image for OG
+    const parseImages = (imageField: unknown): string[] => {
+        if (!imageField) return [];
+        if (Array.isArray(imageField)) return imageField.filter((i): i is string => typeof i === 'string');
+        if (typeof imageField !== 'string') return [];
+        try {
+            const parsed = JSON.parse(imageField);
+            if (Array.isArray(parsed)) return parsed.filter((i): i is string => typeof i === 'string');
+        } catch { /* ignore */ }
+        return [imageField];
+    };
+    const coverImages = parseImages(news.cover_image);
+    const ogImage = coverImages[0] ?? null;
 
     return {
         title: `${news.title} - yichihealth`,
         description: news.summary,
         keywords: `${news.title}, medical news, healthcare industry, yichihealth`,
         alternates: {
-            canonical: `/${locale}/news/${slug}`,
+            canonical: `${SITE_URL}/${locale}/news/${slug}`,
             languages: {
-                en: `/en/news/${slug}`,
-                zh: `/zh/news/${slug}`,
-                'x-default': `/en/news/${slug}`,
+                en: `${SITE_URL}/en/news/${slug}`,
+                zh: `${SITE_URL}/zh/news/${slug}`,
+                'x-default': `${SITE_URL}/en/news/${slug}`,
             },
+        },
+        openGraph: {
+            title: news.title,
+            description: news.summary ?? undefined,
+            type: 'article',
+            publishedTime: news.published_at ?? undefined,
+            url: `${SITE_URL}/${locale}/news/${slug}`,
+            ...(ogImage && {
+                images: [{ url: ogImage, width: 1200, height: 630, alt: news.title }],
+            }),
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: news.title,
+            description: news.summary ?? undefined,
+            ...(ogImage && { images: [ogImage] }),
         },
     };
 }
@@ -98,7 +129,7 @@ export default async function NewsDetailPage({ params }: Props) {
                 <div className="relative">
                     {images.map((img, idx) => (
                          <div key={idx} className={`md:mb-8 mb-10 w-full md:w-80 lg:w-96 rounded-2xl overflow-hidden shadow-xl border border-zinc-100 dark:border-zinc-800 ring-4 ring-white dark:ring-zinc-900 ${idx % 2 === 0 ? 'md:float-right md:ml-8' : 'md:float-left md:mr-8'}`}>
-                             <img src={img} alt={`${news.title} - ${idx + 1}`} className="w-full h-auto" />
+                             <img src={img} alt={`${news.title} - image ${idx + 1}`} className="w-full h-auto" width={640} height={480} loading="lazy" />
                          </div>
                     ))}
                     <div dangerouslySetInnerHTML={{ __html: content }} />
@@ -119,7 +150,7 @@ export default async function NewsDetailPage({ params }: Props) {
                         <div key={i}>
                             {showImage && (
                                 <div className={`md:mb-6 mb-8 w-full md:w-80 lg:w-96 rounded-2xl overflow-hidden shadow-xl border border-zinc-100 dark:border-zinc-800 ring-4 ring-white dark:ring-zinc-900 ${imgIndex % 2 === 0 ? 'md:float-right md:ml-8' : 'md:float-left md:mr-8'}`}>
-                                    <img src={images[imgIndex]} alt={`${news.title} - Image ${imgIndex + 1}`} className="w-full h-auto" />
+                                    <img src={images[imgIndex]} alt={`${news.title} - image ${imgIndex + 1}`} className="w-full h-auto" width={640} height={480} loading="lazy" />
                                 </div>
                             )}
                             <p>{para}</p>
@@ -132,7 +163,7 @@ export default async function NewsDetailPage({ params }: Props) {
 
     const newsImages = parseImages(news.cover_image);
 
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.yichihealth.com';
+    const baseUrl = SITE_URL;
     const newsJsonLd = {
         '@context': 'https://schema.org',
         '@type': 'NewsArticle',
@@ -213,6 +244,7 @@ export default async function NewsDetailPage({ params }: Props) {
                                                     src={parseImages(item.cover_image)[0] || ""} 
                                                     alt={item.title} 
                                                     className="w-full h-full object-cover" 
+                                                    loading="lazy"
                                                 />
                                             )}
                                         </div>

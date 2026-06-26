@@ -3,6 +3,7 @@ import { supabase } from '@/supabase';
 import MainFooter from '@/components/MainFooter';
 import MainNavbar from '@/components/MainNavbar';
 import { fixImageUrl } from '@/lib/image';
+import { SITE_URL } from '@/lib/site';
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -16,15 +17,35 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
     return {
         title: t('aboutTitle'),
-        description: t('description'),
+        description: t('aboutDescription'),
         keywords: 'about yichihealth, medical supplies company, china medical equipment supplier, healthcare solutions',
         alternates: {
-            canonical: `/${locale}/about`,
+            canonical: `${SITE_URL}/${locale}/about`,
             languages: {
-                en: '/en/about',
-                zh: '/zh/about',
-                'x-default': '/en/about',
+                en: `${SITE_URL}/en/about`,
+                zh: `${SITE_URL}/zh/about`,
+                'x-default': `${SITE_URL}/en/about`,
             },
+        },
+        openGraph: {
+            title: t('aboutTitle'),
+            description: t('aboutDescription'),
+            type: 'website',
+            url: `${SITE_URL}/${locale}/about`,
+            images: [
+                {
+                    url: `${SITE_URL}/home.png`,
+                    width: 2730,
+                    height: 1536,
+                    alt: 'About Yichi Health',
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: t('aboutTitle'),
+            description: t('aboutDescription'),
+            images: [`${SITE_URL}/home.png`],
         },
     };
 }
@@ -161,6 +182,7 @@ export default async function AboutPage({ params }: Props) {
                                     src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&q=80&w=1200"
                                     alt="Company Profile Medical Supplies"
                                     className="absolute inset-0 w-full h-full object-cover"
+                                    loading="lazy"
                                 />
                                 {/* Bottom right green box */}
                                 <div className="absolute bottom-0 right-0 bg-blue-600 text-white font-semibold py-4 px-6 md:px-10 text-lg shadow-lg">
@@ -189,7 +211,7 @@ export default async function AboutPage({ params }: Props) {
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={url}
-                                        alt={`Factory Photo ${idx + 1}`}
+                                        alt={`Yichi Health medical equipment factory - photo ${idx + 1}`}
                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                         loading="lazy"
                                     />

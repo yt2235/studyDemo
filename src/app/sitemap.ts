@@ -5,6 +5,10 @@ import { SITE_URL } from '@/lib/site';
 
 export const revalidate = 60;
 
+// Date of the last meaningful update to static pages.
+// Update this manually when you make significant changes to static content.
+const STATIC_LAST_MODIFIED = new Date('2026-06-26');
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Base routes
     const routes = ['', '/about', '/news', '/products', '/contact', '/inquiry', '/faq'];
@@ -41,12 +45,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Combined Entries
     const entries: MetadataRoute.Sitemap = [];
 
-    // Static Routes
+    // Static Routes — use a fixed date to avoid telling Google these pages
+    // changed on every build when the actual content hasn't changed.
     for (const locale of routing.locales) {
         for (const route of routes) {
             entries.push({
                 url: getLocalizedUrl(route, locale),
-                lastModified: new Date(),
+                lastModified: STATIC_LAST_MODIFIED,
                 changeFrequency: 'weekly' as const,
                 priority: route === '' ? 1 : 0.8,
                 alternates: getAlternates(route),
@@ -55,7 +60,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Product routes
-    const { data: products, error: productsError } = await supabase.from('products').select('id, name, image_url');
+    const { data: products, error: productsError } = await supabase
+        .from('products')
+        .select('id, name, image_url');
     if (productsError) {
         console.error('Failed to fetch products for sitemap:', productsError);
     }
@@ -67,8 +74,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             for (const locale of routing.locales) {
                 entries.push({
                     url: getLocalizedUrl(`/products/${productSlug}`, locale),
-                    lastModified: new Date(),
-                    changeFrequency: 'daily' as const,
+                    lastModified: STATIC_LAST_MODIFIED,
+                    changeFrequency: 'weekly' as const,
                     priority: 0.6,
                     alternates: getAlternates(`/products/${productSlug}`),
                     images: productImages,
@@ -77,11 +84,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
     }
 
-    // News routes
+    // News routes — only include entries that have an explicit slug.
+    // Entries without a slug would produce UUID/numeric ID URLs that cause redirects or 404s.
     const { data: news } = await supabase.from('news').select('id, slug, cover_image, updated_at, created_at').eq('is_published', true);
     if (news) {
         for (const item of news) {
-            const slugOrId = cleanPathSegment(item.slug || String(item.id));
+            if (!item.slug) continue; // skip entries without a proper slug
+            const slugOrId = cleanPathSegment(item.slug);
             const path = `/news/${slugOrId}`;
             const newsImages = parseImages(item.cover_image);
             

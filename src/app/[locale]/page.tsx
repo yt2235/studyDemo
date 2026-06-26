@@ -39,21 +39,21 @@ export async function generateMetadata({ params }: Props) {
             'dental equipment',
         ],
         alternates: {
-            canonical: `/${locale}`,
+            canonical: `${SITE_URL}/${locale}`,
             languages: {
-                en: '/en',
-                zh: '/zh',
-                'x-default': '/en',
+                en: `${SITE_URL}/en`,
+                zh: `${SITE_URL}/zh`,
+                'x-default': `${SITE_URL}/en`,
             },
         },
         openGraph: {
             title: `${BRAND_NAME} (${SITE_NAME}) | Global Medical Supplies`,
             description: `${SITE_NAME} is the official online platform for ${BRAND_NAME}, a global supplier of medical equipment, consumables and laboratory supplies.`,
-            url: `/${locale}`,
+            url: `${SITE_URL}/${locale}`,
             siteName: `${BRAND_NAME} (${SITE_NAME})`,
             images: [
                 {
-                    url: '/home.png',
+                    url: `${SITE_URL}/home.png`,
                     width: 2730,
                     height: 1536,
                     alt: `${BRAND_NAME} medical equipment and supplies`,
@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: Props) {
             card: 'summary_large_image',
             title: `${BRAND_NAME} (${SITE_NAME})`,
             description: `${SITE_NAME} official website for medical equipment, consumables, diagnostic testing products and laboratory supplies.`,
-            images: ['/home.png'],
+            images: [`${SITE_URL}/home.png`],
         },
     };
 }

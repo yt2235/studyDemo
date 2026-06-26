@@ -3,6 +3,7 @@ import { supabase } from '@/supabase';
 import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
 import FAQClient from '@/components/FAQClient';
+import { SITE_URL } from '@/lib/site';
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -19,12 +20,32 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         description: t('subtitle'),
         keywords: 'medical supplies FAQ, yichihealth help, healthcare equipment support',
         alternates: {
-            canonical: `/${locale}/faq`,
+            canonical: `${SITE_URL}/${locale}/faq`,
             languages: {
-                en: '/en/faq',
-                zh: '/zh/faq',
-                'x-default': '/en/faq',
+                en: `${SITE_URL}/en/faq`,
+                zh: `${SITE_URL}/zh/faq`,
+                'x-default': `${SITE_URL}/en/faq`,
             },
+        },
+        openGraph: {
+            title: `${t('title')} | yichihealth`,
+            description: t('subtitle'),
+            type: 'website',
+            url: `${SITE_URL}/${locale}/faq`,
+            images: [
+                {
+                    url: `${SITE_URL}/home.png`,
+                    width: 2730,
+                    height: 1536,
+                    alt: 'Yichi Health FAQ',
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${t('title')} | yichihealth`,
+            description: t('subtitle'),
+            images: [`${SITE_URL}/home.png`],
         },
     };
 }
@@ -42,11 +63,36 @@ export default async function FAQPage({ params }: Props) {
         .eq('is_published', true)
         .order('display_order', { ascending: true });
 
+    // Build FAQPage JSON-LD for Google Rich Results
+    const faqJsonLd = faqs && faqs.length > 0
+        ? {
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: faqs.map((faq) => ({
+                  '@type': 'Question',
+                  name: faq.question,
+                  acceptedAnswer: {
+                      '@type': 'Answer',
+                      // Strip HTML tags for plain-text JSON-LD output
+                      text: faq.answer?.replace(/<[^>]*>/g, '') ?? '',
+                  },
+              })),
+          }
+        : null;
+
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 transition-colors duration-500">
             <MainNavbar locale={locale} />
 
             <main>
+                {/* FAQPage JSON-LD — enables Google Rich Results (FAQ accordion in search) */}
+                {faqJsonLd && (
+                    <script
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+                    />
+                )}
+
                 {/* Hero Section */}
                 <section className="relative pt-8 pb-3 md:pt-16 md:pb-3 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-white dark:from-zinc-900/50 dark:to-zinc-950 -z-10" />

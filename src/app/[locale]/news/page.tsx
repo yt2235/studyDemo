@@ -4,6 +4,7 @@ import MainFooter from '@/components/MainFooter';
 import { supabase } from '@/supabase';
 import Link from 'next/link';
 import { CalendarOutlined, EyeOutlined, ArrowRightOutlined } from '@ant-design/icons';
+import { SITE_URL } from '@/lib/site';
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -19,12 +20,32 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
         title: `${t('title')} - yichihealth`,
         description: t('subtitle'),
         alternates: {
-            canonical: `/${locale}/news`,
+            canonical: `${SITE_URL}/${locale}/news`,
             languages: {
-                en: '/en/news',
-                zh: '/zh/news',
-                'x-default': '/en/news',
+                en: `${SITE_URL}/en/news`,
+                zh: `${SITE_URL}/zh/news`,
+                'x-default': `${SITE_URL}/en/news`,
             },
+        },
+        openGraph: {
+            title: `${t('title')} - yichihealth`,
+            description: t('subtitle'),
+            type: 'website',
+            url: `${SITE_URL}/${locale}/news`,
+            images: [
+                {
+                    url: `${SITE_URL}/home.png`,
+                    width: 2730,
+                    height: 1536,
+                    alt: 'Yichi Health News',
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${t('title')} - yichihealth`,
+            description: t('subtitle'),
+            images: [`${SITE_URL}/home.png`],
         },
     };
 }
@@ -102,6 +123,7 @@ export default async function NewsListingPage({ params }: Props) {
                                                         src={thumb}
                                                         alt={item.title}
                                                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                        loading="lazy"
                                                     />
                                                 );
                                             }

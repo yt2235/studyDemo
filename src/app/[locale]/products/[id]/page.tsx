@@ -1,6 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { supabase } from '@/supabase';
-import { notFound, permanentRedirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { ProductImageGallery } from '@/components/ProductImageGallery';
 import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
@@ -8,6 +8,7 @@ import { parseImageUrl } from '@/lib/image';
 import { AppstoreOutlined, FileTextOutlined } from '@ant-design/icons';
 
 import { parseIdFromSlug, slugify } from '@/lib/slug';
+import { SITE_URL } from '@/lib/site';
 
 export const revalidate = 60;
 
@@ -63,14 +64,27 @@ export async function generateMetadata({ params }: Props) {
 
     return {
         title: `${typedProduct.name} - ${displayCategory}`,
-        description: `${typedProduct.name} (${displayCategory}) - ${typedProduct.specification}. ${typedProduct.description?.substring(0, 150)}...`,
+        description: (() => {
+            const raw = typedProduct.description ?? '';
+            // Truncate at a word/punctuation boundary to avoid mid-word cuts
+            const MAX = 150;
+            const base = `${typedProduct.name} (${displayCategory}) - ${typedProduct.specification ?? ''}. `;
+            const remaining = MAX - base.length;
+            if (remaining <= 0 || !raw) return base.trim();
+            if (raw.length <= remaining) return `${base}${raw}`.trim();
+            // Find last space or punctuation before the limit for a clean cut
+            const cut = raw.slice(0, remaining);
+            const boundary = cut.search(/[\s，。！？,.!?](?=[^\s，。！？,.!?]*$)/);
+            const trimmed = boundary > 0 ? cut.slice(0, boundary) : cut;
+            return `${base}${trimmed}…`.trim();
+        })(),
         keywords: `${typedProduct.name}, ${displayCategory}, medical supplies, health equipment, yichihealth`,
         alternates: {
-            canonical: `/${locale}/products/${productSlug}`,
+            canonical: `${SITE_URL}/${locale}/products/${productSlug}`,
             languages: {
-                en: `/en/products/${productSlug}`,
-                zh: `/zh/products/${productSlug}`,
-                'x-default': `/en/products/${productSlug}`,
+                en: `${SITE_URL}/en/products/${productSlug}`,
+                zh: `${SITE_URL}/zh/products/${productSlug}`,
+                'x-default': `${SITE_URL}/en/products/${productSlug}`,
             },
         },
         openGraph: {
@@ -84,7 +98,7 @@ export async function generateMetadata({ params }: Props) {
                     alt: typedProduct.name,
                 },
             ],
-            type: 'article',
+            type: 'website',
         },
         twitter: {
             card: 'summary_large_image',
@@ -116,8 +130,10 @@ export default async function ProductDetailPage({ params }: Props) {
     const productImages = parseImageUrl(typedProduct.image_url);
     const productSlug = `${typedProduct.id}-${slugify(typedProduct.name)}`;
 
+    // Only serve the canonical slug URL. Any non-slug format (e.g. pure numeric IDs)
+    // returns 404 so Google removes old redirect URLs from its index.
     if (decodeURIComponent(id) !== productSlug) {
-        permanentRedirect(`/${locale}/products/${productSlug}`);
+        notFound();
     }
 
     // Fetch actual category name if category_id exists
@@ -133,8 +149,7 @@ export default async function ProductDetailPage({ params }: Props) {
         }
     }
 
-    const baseUrl = 'https://www.yichihealth.com';
-    const productUrl = `${baseUrl}/${locale}/products/${productSlug}`;
+    const productUrl = `${SITE_URL}/${locale}/products/${productSlug}`;
 
     const productJsonLd = {
         '@context': 'https://schema.org',
@@ -169,13 +184,13 @@ export default async function ProductDetailPage({ params }: Props) {
                 '@type': 'ListItem',
                 position: 1,
                 name: 'Home',
-                item: `${baseUrl}/${locale}`
+                item: `${SITE_URL}/${locale}`
             },
             {
                 '@type': 'ListItem',
                 position: 2,
                 name: displayCategory,
-                item: `${baseUrl}/${locale}/products`
+                item: `${SITE_URL}/${locale}/products`
             },
             {
                 '@type': 'ListItem',
