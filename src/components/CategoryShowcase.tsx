@@ -2,6 +2,8 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { slugify } from "@/lib/slug";
+import { SearchOutlined } from "@ant-design/icons";
+import { useInquiryStore } from "@/store/inquiryStore";
 
 export interface Category {
     id: string;
@@ -62,12 +64,33 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
     const [activeL1, setActiveL1] = useState<string>("all");
     const [activeL2, setActiveL2] = useState<string | null>(null);
     const [activeL3, setActiveL3] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const { addToCart, removeFromCart, isInCart } = useInquiryStore();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const scrollTargetRef = useRef<HTMLDivElement>(null);
+    const scrollToProducts = () => {
+        if (!scrollTargetRef.current) return;
+        const rect = scrollTargetRef.current.getBoundingClientRect();
+        // If the top of the products section is above the viewport, scroll back up.
+        // We use a threshold (e.g. 120px) to account for sticky headers.
+        if (rect.top < 120) {
+            const offset = window.scrollY + rect.top - 120;
+            window.scrollTo({ top: offset, behavior: 'smooth' });
+        }
+    };
 
     // Handle L1 change
     const handleL1Change = (id: string) => {
         setActiveL1(id);
         setActiveL2(null);
         setActiveL3(null);
+        scrollToProducts();
     };
 
     // Handle L2 change
@@ -80,6 +103,12 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
             setActiveL2(id);
             setActiveL3(null);
         }
+        scrollToProducts();
+    };
+
+    const handleL3Change = (id: string | null) => {
+        setActiveL3(id);
+        scrollToProducts();
     };
 
     // Derived current L2 & L3 categories
@@ -112,10 +141,26 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
     }, [activeDeepestCategoryId, categories]);
 
     const displayedProducts = useMemo(() => {
-        if (activeL1 === "all") return products;
-        if (validCategoryIds.length === 0) return [];
-        return products.filter((p) => validCategoryIds.includes(p.category_id));
-    }, [products, validCategoryIds, activeL1]);
+        let filtered = products;
+
+        if (activeL1 !== "all") {
+            if (validCategoryIds.length === 0) {
+                filtered = [];
+            } else {
+                filtered = filtered.filter((p) => validCategoryIds.includes(p.category_id));
+            }
+        }
+
+        if (searchQuery.trim()) {
+            const query = searchQuery.toLowerCase().trim();
+            filtered = filtered.filter(p =>
+                p.name.toLowerCase().includes(query) ||
+                (p.specification && p.specification.toLowerCase().includes(query))
+            );
+        }
+
+        return filtered;
+    }, [products, validCategoryIds, activeL1, searchQuery]);
 
     return (
         <section id="products" className="pb-24 md:pb-32 scroll-mt-20 focus:outline-none">
@@ -152,9 +197,35 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
                     No categories found. Please add categories in the database.
                 </div>
             ) : (
-                <div className="flex flex-col gap-6">
-                    {/* Level 1 Category Selection */}
-                    <div className="z-40">
+                <div className="flex flex-col gap-6" ref={scrollTargetRef}>
+                    <div className="z-40 flex flex-col gap-4">
+                        {/* Search Bar */}
+                        <div className="relative group">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
+                                <svg className="w-6 h-6 text-zinc-400 dark:text-zinc-500 group-focus-within:text-blue-600 dark:group-focus-within:text-blue-400 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </div>
+                            <input
+                                type="text"
+                                placeholder={locale === 'zh' ? '搜索产品型号、名称或关键词...' : 'Search product models, names, or keywords...'}
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full pl-12 pr-12 py-3.5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl border-2 border-zinc-200/80 dark:border-zinc-800/80 rounded-xl text-zinc-900 dark:text-zinc-100 placeholder-zinc-400/80 dark:placeholder-zinc-500/80 focus:outline-none focus:border-blue-500 dark:focus:border-blue-500 focus:bg-white dark:focus:bg-zinc-900 focus:ring-4 focus:ring-blue-500/20 dark:focus:ring-blue-500/20 transition-all duration-300 shadow-sm hover:shadow-md text-base"
+                            />
+                            {searchQuery && (
+                                <button
+                                    onClick={() => setSearchQuery("")}
+                                    className="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors z-10"
+                                >
+                                    <svg className="w-5 h-5 bg-zinc-100 dark:bg-zinc-800 rounded-full p-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Level 1 Category Selection */}
                         <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-zinc-200/50 dark:border-zinc-800/50 rounded-xl shadow-sm dark:shadow-black/20 p-2.5 md:p-3">
                             <h3 className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-2 opacity-100">
                                 {locale === 'zh' ? '筛选分类' : 'Filter by Category'}
@@ -231,7 +302,7 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
                                                             <div className="hidden lg:block pl-3 mt-0.5 mb-1.5">
                                                                 <div className="border-l border-zinc-200 dark:border-zinc-800 pl-2.5 flex flex-col gap-0.5 py-0.5">
                                                                     <button
-                                                                        onClick={() => setActiveL3(null)}
+                                                                        onClick={() => handleL3Change(null)}
                                                                         className={`text-left px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-colors ${activeL3 === null
                                                                             ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400"
                                                                             : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/50"
@@ -242,7 +313,7 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
                                                                     {currentL3s.map((l3) => (
                                                                         <button
                                                                             key={l3.id}
-                                                                            onClick={() => setActiveL3(l3.id)}
+                                                                            onClick={() => handleL3Change(l3.id)}
                                                                             className={`text-left px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-colors ${activeL3 === l3.id
                                                                                 ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 font-semibold"
                                                                                 : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800/50"
@@ -265,7 +336,7 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
                                             <div className="lg:hidden flex flex-col gap-1.5 pt-2 border-t border-zinc-100 dark:border-zinc-800/50">
                                                 <div className="flex flex-row gap-1.5 overflow-x-auto pb-1 no-scrollbar p-1">
                                                     <button
-                                                        onClick={() => setActiveL3(null)}
+                                                        onClick={() => handleL3Change(null)}
                                                         className={`whitespace-nowrap px-3.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all shrink-0 ${activeL3 === null
                                                             ? "bg-blue-600 text-white shadow-md shadow-blue-500/20 border border-blue-500"
                                                             : "bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-100 dark:border-zinc-800/50"
@@ -276,7 +347,7 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
                                                     {currentL3s.map((l3) => (
                                                         <button
                                                             key={l3.id}
-                                                            onClick={() => setActiveL3(l3.id)}
+                                                            onClick={() => handleL3Change(l3.id)}
                                                             className={`whitespace-nowrap px-3.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all shrink-0 ${activeL3 === l3.id
                                                                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/20 border border-blue-500"
                                                                 : "bg-zinc-50 dark:bg-zinc-800/50 text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 border border-zinc-100 dark:border-zinc-800/50"
@@ -315,7 +386,38 @@ export function CategoryShowcase({ categories, products, locale, dict }: Props) 
                                                                 loading="lazy"
                                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                                             />
-                                                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                                            <div className={`absolute bottom-3 right-3 z-20 flex gap-2 transition-all duration-300 ${mounted && isInCart(product.id) ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100'}`}>
+                                                                {mounted && isInCart(product.id) ? (
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            e.stopPropagation();
+                                                                            removeFromCart(product.id);
+                                                                        }}
+                                                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-bold rounded-lg shadow-lg backdrop-blur-sm transition-colors"
+                                                                    >
+                                                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                                                        </svg>
+                                                                        {locale === 'zh' ? '已加入' : 'Added'}
+                                                                    </button>
+                                                                ) : (
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.preventDefault();
+                                                                            e.stopPropagation();
+                                                                            addToCart({ id: product.id, name: product.name, specification: product.specification });
+                                                                        }}
+                                                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/90 hover:bg-blue-600 text-white text-xs font-bold rounded-lg shadow-lg backdrop-blur-sm transition-colors"
+                                                                    >
+                                                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                                                                        </svg>
+                                                                        {locale === 'zh' ? '加入询盘' : 'Inquire'}
+                                                                    </button>
+                                                                )}
+                                                            </div>
                                                         </>
                                                     ) : (
                                                         <div className="w-full h-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-800">

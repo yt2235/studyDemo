@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { supabase } from '@/supabase';
+import { useInquiryStore } from '@/store/inquiryStore';
 import { Select, ConfigProvider, theme } from 'antd';
 import {
     UserOutlined,
@@ -62,6 +63,25 @@ export default function LeadForm({ dict }: LeadFormProps) {
     const [orgType, setOrgType] = useState<string | null>(null);
     const [timeline, setTimeline] = useState<string | null>(null);
 
+    // Inquiry Cart
+    const cart = useInquiryStore((state) => state.cart);
+    const clearCart = useInquiryStore((state) => state.clearCart);
+
+    const initialRequirement = useMemo(() => {
+        if (cart.length === 0) return '';
+        const list = cart.map((p, i) => `${i + 1}. ${p.name}${p.specification ? ` (${p.specification})` : ''}`).join('\n');
+        return `I am interested in the following products:\n${list}\n\nMy specific requirements are: \n`;
+    }, [cart]);
+
+    const [requirementText, setRequirementText] = useState(initialRequirement);
+
+    // Only set requirement text once if cart is loaded after initial mount (hydration)
+    useEffect(() => {
+        if (cart.length > 0 && !requirementText) {
+            setRequirementText(initialRequirement);
+        }
+    }, [cart.length, initialRequirement]);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
@@ -89,6 +109,7 @@ export default function LeadForm({ dict }: LeadFormProps) {
             setError(dict.form.error);
         } else {
             setSuccess(true);
+            clearCart();
         }
         setLoading(false);
     };
@@ -245,6 +266,8 @@ export default function LeadForm({ dict }: LeadFormProps) {
                         required
                         name="requirement"
                         rows={5}
+                        value={requirementText}
+                        onChange={(e) => setRequirementText(e.target.value)}
                         placeholder={dict.form.requirementPlaceholder}
                         className="w-full px-5 py-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 focus:border-blue-500 dark:focus:border-blue-400 focus:ring-4 focus:ring-blue-500/5 outline-none transition-all placeholder:text-zinc-400 dark:placeholder:text-zinc-600 font-medium resize-none"
                     />

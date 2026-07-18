@@ -142,7 +142,7 @@ export default async function HomePage({ params }: Props) {
                     <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-center gap-6">
                         <a
                             href="#products"
-                            className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold text-lg shadow-xl shadow-blue-500/25 hover:shadow-2xl hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-1 active:scale-95"
+                            className="group relative w-full sm:w-auto inline-flex items-center justify-center gap-3 px-12 py-4 rounded-full bg-blue-600 text-white font-bold text-lg shadow-xl shadow-blue-600/30 hover:bg-blue-700 hover:shadow-2xl hover:shadow-blue-600/50 transition-all duration-300 hover:-translate-y-1 active:scale-95"
                         >
                             <span>{t('viewProducts')}</span>
                             <svg
@@ -157,7 +157,7 @@ export default async function HomePage({ params }: Props) {
                         </a>
                         <a
                             href={`/${locale}/contact`}
-                            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full border-2 border-blue-600 text-blue-600 dark:text-blue-400 font-bold text-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 hover:-translate-y-1 active:scale-95"
+                            className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-12 py-4 rounded-full border-2 border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 font-bold text-lg hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300 hover:-translate-y-1 active:scale-95"
                         >
                             {t('contactUs')}
                         </a>
@@ -173,7 +173,7 @@ export default async function HomePage({ params }: Props) {
                         </div>
                     </div>
                 ) : (
-                    <div className="max-w-7xl mx-auto px-0 md:px-6">
+                    <div id="products" className="max-w-7xl mx-auto px-0 md:px-6 scroll-mt-24">
                         <CategoryShowcase
                             categories={categoriesData}
                             products={typedProducts}

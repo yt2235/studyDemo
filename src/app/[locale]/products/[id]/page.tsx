@@ -6,6 +6,7 @@ import MainNavbar from '@/components/MainNavbar';
 import MainFooter from '@/components/MainFooter';
 import { parseImageUrl } from '@/lib/image';
 import { AppstoreOutlined, FileTextOutlined } from '@ant-design/icons';
+import AddToCartButton from '@/components/AddToCartButton';
 
 import { parseIdFromSlug, slugify } from '@/lib/slug';
 import { SITE_URL } from '@/lib/site';
@@ -245,77 +246,72 @@ export default async function ProductDetailPage({ params }: Props) {
                     </div>
                 </div>
 
-                {/* Product Detail Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-                    {/* Left: Product Image */}
-                    <div className="animate-slide-in-left lg:col-span-5 max-w-lg mx-auto w-full">
+                {/* Product Detail Layout (Modern Sticky Grid) */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start animate-slide-up">
+                    {/* Left: Product Image (Sticky on Desktop) */}
+                    <div className="lg:col-span-5 w-full sticky top-24 z-10 max-w-lg mx-auto lg:mx-0 flex flex-col gap-6">
                         <ProductImageGallery
                             images={productImages}
                             productName={typedProduct.name}
                         />
                     </div>
 
-                    {/* Right: Product Info */}
-                    <div className="animate-slide-in-right lg:col-span-7 flex flex-col">
-
-                        {/* Info Cards */}
-                        <div className="space-y-4 mb-10">
-                            {/* Specification / Size */}
+                    {/* Right: Unified Product Info */}
+                    <div className="lg:col-span-7 flex flex-col">
+                        <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 sm:p-10 shadow-sm border border-zinc-100 dark:border-zinc-800">
+                            
+                            {/* Specification Section */}
                             {typedProduct.specification && (
-                                <div className="flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow duration-300">
-                                    <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0 border border-indigo-100 dark:border-indigo-800/50 transition-transform group-hover:scale-110">
-                                        <AppstoreOutlined className="text-2xl text-indigo-600 dark:text-indigo-400" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
-                                            {t('specification')}
-                                        </div>
-                                        <div className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-                                            {typedProduct.specification}
-                                        </div>
-                                    </div>
+                                <div className="mb-10 group">
+                                    <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-4">
+                                        <AppstoreOutlined className="text-lg text-blue-500 transition-transform group-hover:scale-110" />
+                                        {t('specification')}
+                                    </h3>
+                                    <p className="text-xl font-medium text-zinc-900 dark:text-zinc-100 ml-[9px] pl-5 border-l-2 border-blue-500/20 group-hover:border-blue-500 transition-colors">
+                                        {typedProduct.specification}
+                                    </p>
                                 </div>
                             )}
 
+                            {typedProduct.specification && typedProduct.description && (
+                                <div className="h-px w-full bg-zinc-100 dark:bg-zinc-800/80 mb-10" />
+                            )}
 
-                            {/* Description */}
+                            {/* Description Section */}
                             {typedProduct.description && (
-                                <div className="flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-shadow duration-300">
-                                    <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center flex-shrink-0 border border-blue-100 dark:border-blue-800/50 transition-transform group-hover:scale-110">
-                                        <FileTextOutlined className="text-2xl text-blue-600 dark:text-blue-400" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
-                                            {t('description')}
-                                        </div>
-                                        <div className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300 whitespace-pre-line">
-                                            {typedProduct.description}
-                                        </div>
+                                <div className="group">
+                                    <h3 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-5">
+                                        <FileTextOutlined className="text-lg text-blue-500 transition-transform group-hover:scale-110" />
+                                        {t('description')}
+                                    </h3>
+                                    <div className="text-lg leading-relaxed text-zinc-600 dark:text-zinc-400 whitespace-pre-line ml-[9px] pl-5 border-l-2 border-blue-500/20 group-hover:border-blue-500 transition-colors">
+                                        {typedProduct.description}
                                     </div>
                                 </div>
                             )}
-                        </div>
 
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <a
-                                href={`/${locale}/inquiry`}
-                                className="group relative inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:-translate-y-0.5"
-                            >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                                {t('contactInquiry')}
-                            </a>
-                            <a
-                                href={`/${locale}/products`}
-                                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 hover:-translate-y-0.5"
-                            >
-                                {t('viewMore')}
-                            </a>
                         </div>
                     </div>
                 </div>
             </main>
+
+            {/* Floating Action Bar */}
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-slide-up">
+                <div className="flex items-center gap-3 p-2 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-xl rounded-full shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] border border-zinc-200/50 dark:border-zinc-700/50">
+                    <div className="w-[160px] sm:w-[200px]">
+                        <AddToCartButton 
+                            product={{ id: typedProduct.id, name: typedProduct.name, specification: typedProduct.specification }} 
+                            locale={locale} 
+                        />
+                    </div>
+                    <a
+                        href={`/${locale}/products`}
+                        className="w-[160px] sm:w-[200px] inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 text-sm sm:text-base font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all duration-300 whitespace-nowrap"
+                    >
+                        {t('viewMore')}
+                    </a>
+                </div>
+            </div>
 
             {/* Footer */}
             <MainFooter locale={locale} />

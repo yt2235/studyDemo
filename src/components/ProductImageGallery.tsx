@@ -33,15 +33,6 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
         }
     }, [activeIndex]);
 
-    const scrollThumbnails = (direction: 'left' | 'right') => {
-        if (thumbScrollRef.current) {
-            const scrollAmount = 200;
-            thumbScrollRef.current.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth'
-            });
-        }
-    };
 
     if (!images || images.length === 0) {
         return (
@@ -56,12 +47,12 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
     return (
         <div className="space-y-4">
             {/* Main Image */}
-            <div className="group relative aspect-square rounded-xl overflow-hidden bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 shadow-xl">
+            <div className="group relative aspect-square rounded-xl overflow-hidden bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 shadow-sm">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src={images[activeIndex]}
                     alt={`${productName} - ${activeIndex + 1}`}
-                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
+                    className="w-full h-full object-contain p-4 transition-all duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -102,7 +93,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
                 <div className="relative group/thumbs">
                     {/* Left Scroll Button */}
                     <button
-                        onClick={() => scrollThumbnails('left')}
+                        onClick={handlePrev}
                         className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-8 h-8 rounded-full bg-white dark:bg-zinc-900 shadow-md border border-zinc-200 dark:border-zinc-800 flex items-center justify-center z-10 opacity-0 group-hover/thumbs:opacity-100 transition-opacity hover:bg-zinc-50 dark:hover:bg-zinc-800"
                     >
                         <svg className="w-4 h-4 text-zinc-600 dark:text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -127,7 +118,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
                                 <img
                                     src={url}
                                     alt={`${productName} - thumbnail ${index + 1}`}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-contain p-1.5 bg-white dark:bg-zinc-900"
                                     loading="lazy"
                                 />
                             </button>
@@ -136,7 +127,7 @@ export function ProductImageGallery({ images, productName }: ProductImageGallery
 
                     {/* Right Scroll Button */}
                     <button
-                        onClick={() => scrollThumbnails('right')}
+                        onClick={handleNext}
                         className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 w-8 h-8 rounded-full bg-white dark:bg-zinc-900 shadow-md border border-zinc-200 dark:border-zinc-800 flex items-center justify-center z-10 opacity-0 group-hover/thumbs:opacity-100 transition-opacity hover:bg-zinc-50 dark:hover:bg-zinc-800"
                     >
                         <svg className="w-4 h-4 text-zinc-600 dark:text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>

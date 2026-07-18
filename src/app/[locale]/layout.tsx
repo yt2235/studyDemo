@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { routing } from '@/i18n/routing';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import InquiryCartIndicator from '@/components/InquiryCartIndicator';
 import '../globals.css';
 import {
     BRAND_NAME,
@@ -170,6 +171,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                 <ThemeProvider>
                     <NextIntlClientProvider>
                         {children}
+                        <InquiryCartIndicator locale={locale} />
                     </NextIntlClientProvider>
                 </ThemeProvider>
             </body>

@@ -94,7 +94,7 @@ export default async function ProductListingPage({ params }: Props) {
                 </div>
 
                 {/* Product Catalog Area */}
-                <div className="max-w-7xl mx-auto px-6 pt-16 pb-24 md:pb-32">
+                <div id="catalog" className="max-w-7xl mx-auto px-6 pt-16 pb-24 md:pb-32">
                     <CategoryShowcase
                         categories={categoriesData}
                         products={typedProducts}
